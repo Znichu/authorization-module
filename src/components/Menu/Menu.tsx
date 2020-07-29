@@ -1,25 +1,26 @@
 import * as React from 'react';
 import 'antd/dist/antd.css';
 import { Menu } from 'antd';
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import style from './Menu.module.css'
 
 export function HeaderMenu () {
     return (
         <Menu mode="horizontal">
             <Menu.Item key="profile">
-                <Link to='/profile'>Profile</Link>
+                <NavLink to='/profile'>Profile</NavLink>
             </Menu.Item>
             <Menu.Item key="sign-in">
-                <Link to='/sign-in'>Sign-in</Link>
+                <NavLink to='/sign-in'>Sign-in</NavLink>
             </Menu.Item>
             <Menu.Item key="register">
-                <Link to='/register'>Register</Link>
+                <NavLink to='/register'>Register</NavLink>
             </Menu.Item>
             <Menu.Item key="forgot">
-                <Link to='/forgot'>Forgot</Link>
+                <NavLink to='/forgot'>Forgot</NavLink>
             </Menu.Item>
             <Menu.Item key="set-new-pass">
-                <Link to='/set-new-pass'>Set new pass</Link>
+                <NavLink to='/set-new-pass'>Set new pass</NavLink>
             </Menu.Item>
         </Menu>
     )

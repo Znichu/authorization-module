@@ -10,7 +10,7 @@ import {SetNewPass} from "./components/Set-New-Pass/SetNewPass";
 
 function App() {
     return (
-        <div>
+        <div className='main'>
             <HeaderMenu/>
             <Route path='/' render={() => <Redirect to="/sign-in"/>}/>
             <Route path='/profile' render={() => <Profile/>}/>

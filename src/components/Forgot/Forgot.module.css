@@ -12,11 +12,17 @@
     margin: 5px;
 }
 
+.error {
+    margin-bottom: 10px;
+}
+
 .forgotForm {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 350px;
+    padding: 5px;
+    margin: 10px;
 }
 .forgotForm button {
     margin-top: 10px;

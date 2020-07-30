@@ -1,3 +1,5 @@
+import {authAPI} from "../components/api/signInApi";
+
 const SET_USER_DATA = 'SET_USER_DATA';
 
 
@@ -41,6 +43,13 @@ export const setAuthUserDataSuccess = (email: string, isAdmin: boolean, success:
     type: SET_USER_DATA,
     payload: {email, isAdmin, success, token}
 });
+
+export const signIn = (email: string, password: string, rememberMe: boolean) => async (dispatch: any) => {
+    let data = await authAPI.signIn(email, password, rememberMe);
+    if (data.success) {
+        //dispatch(setAuthUserDataSuccess(id, email, isAdmin, name, publicCardPacksCount, token, success))
+    }
+};
 
 
 export default signInReducer;

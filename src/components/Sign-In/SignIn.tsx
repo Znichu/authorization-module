@@ -3,6 +3,8 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
 import * as yup from "yup";
 import {Checkbox, Alert} from "antd";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store";
 
 
 type Props = {};
@@ -25,10 +27,13 @@ export const SignIn = (props: Props) => {
 
     const onSubmit = (data: LoginData) => console.log(data);
 
+    const testData = useSelector((state: RootState) => state.singInReducer.message);
+
     return (
         <div>
             <div>
                 <h3>SignIn</h3>
+                <span>{testData}</span>
             </div>
             <div>
                 <form onSubmit={handleSubmit(onSubmit)}>

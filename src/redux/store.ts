@@ -11,5 +11,5 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 
 export let store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
-export type RootState = ReturnType<typeof rootReducer>
+export type AppStateType = ReturnType<typeof rootReducer>
 

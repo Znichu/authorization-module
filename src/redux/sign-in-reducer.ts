@@ -2,27 +2,32 @@ import {authAPI} from "../components/api/signInApi";
 
 const SET_USER_DATA = 'SET_USER_DATA';
 
-
 type initialStateType = {
+    _id: string | null
     email: string | null
-    name: string | null
-    password: string | null
     rememberMe: boolean
     isAdmin: boolean
-    success: boolean
+    name: string | null
+    verified: string | null
+    publicCardPacksCount: number | null
+    __v: number | null
+    password: string | null
     token: string | null
-    message: string
+    success: boolean
 };
 
 const initialState: initialStateType = {
+    _id: null,
     email: null,
-    name: null,
-    password: null,
     rememberMe: false,
     isAdmin: false,
-    success: false,
-    token: '',
-    message: 'hello world'
+    name: null,
+    verified: null,
+    publicCardPacksCount: null,
+    __v: null,
+    password: null,
+    token: null,
+    success: false
 };
 
 
@@ -31,7 +36,7 @@ const signInReducer = (state = initialState, action: any) => {
         case SET_USER_DATA: {
             return {
                 ...state,
-                ...action.payload
+                ...action.authUserData
             }
         }
         default:
@@ -39,15 +44,34 @@ const signInReducer = (state = initialState, action: any) => {
     }
 };
 
-export const setAuthUserDataSuccess = (email: string, isAdmin: boolean, success: boolean, token: string) => ({
+export const setAuthUserDataSuccess = (data: initialStateType) => ({
     type: SET_USER_DATA,
-    payload: {email, isAdmin, success, token}
+    authUserData: data
 });
 
 export const signIn = (email: string, password: string, rememberMe: boolean) => async (dispatch: any) => {
     let data = await authAPI.signIn(email, password, rememberMe);
     if (data.success) {
-        //dispatch(setAuthUserDataSuccess(id, email, isAdmin, name, publicCardPacksCount, token, success))
+        dispatch(setAuthUserDataSuccess(data))
+    }
+};
+
+export const signOut = () => async (dispatch: any) => {
+    let data = await authAPI.signOut();
+    if (data.success) {
+        dispatch(setAuthUserDataSuccess({
+            _id: null,
+            email: null,
+            rememberMe: false,
+            isAdmin: false,
+            name: null,
+            verified: null,
+            publicCardPacksCount: null,
+            __v: null,
+            password: null,
+            token: null,
+            success: false
+        }))
     }
 };
 

@@ -1,6 +1,10 @@
 import {authAPI} from "../components/api/signInApi";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "./store";
 
 const SET_USER_DATA = 'SET_USER_DATA';
+
+export type ThunkType = ThunkAction<void, AppStateType, {}, setAuthUserDataSuccessType>
 
 type initialStateType = {
     _id: string | null
@@ -31,7 +35,8 @@ const initialState: initialStateType = {
 };
 
 
-const signInReducer = (state = initialState, action: any) => {
+//reducer
+const signInReducer = (state = initialState, action: setAuthUserDataSuccessType) => {
     switch (action.type) {
         case SET_USER_DATA: {
             return {
@@ -44,19 +49,29 @@ const signInReducer = (state = initialState, action: any) => {
     }
 };
 
-export const setAuthUserDataSuccess = (data: initialStateType) => ({
+
+//actionType
+export type setAuthUserDataSuccessType = {
+    type: typeof SET_USER_DATA,
+    authUserData: initialStateType
+}
+
+//action
+export const setAuthUserDataSuccess = (data: initialStateType): setAuthUserDataSuccessType => ({
     type: SET_USER_DATA,
     authUserData: data
 });
 
-export const signIn = (email: string, password: string, rememberMe: boolean) => async (dispatch: any) => {
+//thunk to login
+export const signIn = (email: string, password: string, rememberMe: boolean): ThunkType => async (dispatch) => {
     let data = await authAPI.signIn(email, password, rememberMe);
     if (data.success) {
         dispatch(setAuthUserDataSuccess(data))
     }
 };
 
-export const signOut = () => async (dispatch: any) => {
+//thunk to logout
+export const signOut = (): ThunkType => async (dispatch) => {
     let data = await authAPI.signOut();
     if (data.success) {
         dispatch(setAuthUserDataSuccess({

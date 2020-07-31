@@ -20,12 +20,11 @@ const schema = yup.object().shape({
 export const Forgot: React.FC = () => {
     const {handleSubmit, errors, control} = useForm<InputEmailType>({ resolver: yupResolver(schema) });
     const onSubmit = (data: InputEmailType) => {
-        const {email} = data;
-        resetPassword(email);
+        resetPassword(data.email);
         console.log(data)
     };
 
-    const testData = useSelector((state: RootState) => state.forgotPage.testEmail);
+    const errorMessage = useSelector((state: RootState) => state.forgotPage.errorMessage);
     const dispatch = useDispatch();
     const resetPassword = useCallback(
         (data) => dispatch( changePassword(data) ),
@@ -34,6 +33,9 @@ export const Forgot: React.FC = () => {
 
     return (
         <div className={style.forgotPage}>
+            { errorMessage &&
+            <Alert message={errorMessage} type="warning" showIcon closable />
+            }
 
             <h3>Forgot</h3>
 
@@ -51,7 +53,6 @@ export const Forgot: React.FC = () => {
                     name="email"
                     control={control}
                     placeholder="Email"
-                    defaultValue={testData}
                 />
 
                 <Button htmlType="submit" type='primary'>Send email</Button>

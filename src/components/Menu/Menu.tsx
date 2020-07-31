@@ -2,9 +2,8 @@ import * as React from 'react';
 import 'antd/dist/antd.css';
 import { Menu } from 'antd';
 import { Link, NavLink } from "react-router-dom";
-import style from './Menu.module.css'
 
-export function HeaderMenu () {
+export function HeaderMenu() {
     return (
         <Menu mode="horizontal">
             <Menu.Item key="profile">

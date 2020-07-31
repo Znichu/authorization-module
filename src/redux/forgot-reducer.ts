@@ -1,5 +1,5 @@
 import {ThunkAction} from "redux-thunk";
-import {RootState} from "./store";
+import {AppStateType} from "./store";
 import {forgotPageAPI} from "../api/forgot-page";
 
 //State
@@ -61,4 +61,4 @@ export const changePassword = (email: string): ThunkType => async (dispatch) => 
 
 type ActionsType = setChangePasswordSuccessType | setChangePasswordErrorType
 type InitialState = typeof initialState
-type ThunkType = ThunkAction<Promise<void>, RootState, {}, ActionsType>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, {}, ActionsType>

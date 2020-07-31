@@ -6,7 +6,7 @@ import {Button, Input, Alert} from 'antd';
 import style from './Forgot.module.css'
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../redux/store";
+import {AppStateType} from "../../redux/store";
 import {changePassword} from "../../redux/forgot-reducer";
 
 type InputEmailType = {
@@ -24,7 +24,7 @@ export const Forgot: React.FC = () => {
         console.log(data)
     };
 
-    const errorMessage = useSelector((state: RootState) => state.forgotPage.errorMessage);
+    const errorMessage = useSelector((state: AppStateType) => state.forgotPage.errorMessage);
     const dispatch = useDispatch();
     const resetPassword = useCallback(
         (data) => dispatch( changePassword(data) ),

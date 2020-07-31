@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/authorization-module/static/css/main.27fd15f6.chunk.css",
-    "main.js": "/authorization-module/static/js/main.d983a420.chunk.js",
-    "main.js.map": "/authorization-module/static/js/main.d983a420.chunk.js.map",
+    "main.css": "/authorization-module/static/css/main.ba4cc827.chunk.css",
+    "main.js": "/authorization-module/static/js/main.968fb306.chunk.js",
+    "main.js.map": "/authorization-module/static/js/main.968fb306.chunk.js.map",
     "runtime-main.js": "/authorization-module/static/js/runtime-main.4849c254.js",
     "runtime-main.js.map": "/authorization-module/static/js/runtime-main.4849c254.js.map",
-    "static/css/2.fc5a9450.chunk.css": "/authorization-module/static/css/2.fc5a9450.chunk.css",
-    "static/js/2.a3352d10.chunk.js": "/authorization-module/static/js/2.a3352d10.chunk.js",
-    "static/js/2.a3352d10.chunk.js.map": "/authorization-module/static/js/2.a3352d10.chunk.js.map",
+    "static/css/2.c8fdb744.chunk.css": "/authorization-module/static/css/2.c8fdb744.chunk.css",
+    "static/js/2.92d1542a.chunk.js": "/authorization-module/static/js/2.92d1542a.chunk.js",
+    "static/js/2.92d1542a.chunk.js.map": "/authorization-module/static/js/2.92d1542a.chunk.js.map",
     "index.html": "/authorization-module/index.html",
-    "precache-manifest.103aaca22c0995426590117156238bed.js": "/authorization-module/precache-manifest.103aaca22c0995426590117156238bed.js",
+    "precache-manifest.fa88be1e64917367dbbbaba30b63afcb.js": "/authorization-module/precache-manifest.fa88be1e64917367dbbbaba30b63afcb.js",
     "service-worker.js": "/authorization-module/service-worker.js",
-    "static/css/2.fc5a9450.chunk.css.map": "/authorization-module/static/css/2.fc5a9450.chunk.css.map",
-    "static/css/main.27fd15f6.chunk.css.map": "/authorization-module/static/css/main.27fd15f6.chunk.css.map",
-    "static/js/2.a3352d10.chunk.js.LICENSE.txt": "/authorization-module/static/js/2.a3352d10.chunk.js.LICENSE.txt"
+    "static/css/2.c8fdb744.chunk.css.map": "/authorization-module/static/css/2.c8fdb744.chunk.css.map",
+    "static/css/main.ba4cc827.chunk.css.map": "/authorization-module/static/css/main.ba4cc827.chunk.css.map",
+    "static/js/2.92d1542a.chunk.js.LICENSE.txt": "/authorization-module/static/js/2.92d1542a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4849c254.js",
-    "static/css/2.fc5a9450.chunk.css",
-    "static/js/2.a3352d10.chunk.js",
-    "static/css/main.27fd15f6.chunk.css",
-    "static/js/main.d983a420.chunk.js"
+    "static/css/2.c8fdb744.chunk.css",
+    "static/js/2.92d1542a.chunk.js",
+    "static/css/main.ba4cc827.chunk.css",
+    "static/js/main.968fb306.chunk.js"
   ]
 }

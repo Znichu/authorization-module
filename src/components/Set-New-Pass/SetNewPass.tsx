@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import style from "./SetNewPass.module.css";
 import {Controller, useForm} from "react-hook-form";
 import {Button, Input} from "antd";
 import {yupResolver} from "@hookform/resolvers";
 import {schemaSetNewPassForm} from "../../utils/validators/validators";
+import {useDispatch} from "react-redux";
+import {changePassword} from "../../redux/forgot-reducer";
 
 type SetNewPassType = {
     password: string
@@ -16,8 +18,15 @@ export const SetNewPass = () => {
         resolver: yupResolver(schemaSetNewPassForm)
     });
     const onSubmit = (data: SetNewPassType) => {
+        resetPassword(data.password);
         console.log(data)
     };
+
+    const dispatch = useDispatch();
+    const resetPassword = useCallback(
+        (data) => dispatch( changePassword(data) ),
+        [dispatch]
+    )
 
     return (
         <div className={style.setNewPassPage}>

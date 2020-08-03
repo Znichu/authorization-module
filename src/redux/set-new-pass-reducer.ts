@@ -36,10 +36,10 @@ const actions = {
 //Thunk
 export const resetPassword = (resetPasswordToken: string, password: string): ThunkType => async (dispatch) => {
     try {
-        let data = await resetPasswordApi.resetPassword(resetPasswordToken, password)
+        let data = await resetPasswordApi.resetPassword(resetPasswordToken, password);
         dispatch(actions.setNewPassSuccess(data))
     } catch (e) {
-        dispatch(actions.setNewPassError(e.response.data.error))
+        dispatch(actions.setNewPassError(e.response.data.error));
         console.log(e.message)
     }
 }

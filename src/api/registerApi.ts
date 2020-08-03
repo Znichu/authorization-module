@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: "http://localhost:7542/1.0/",
+    /*baseURL: "http://localhost:7542/1.0/",*/
+    baseURL: "https://cards-nya-back.herokuapp.com/1.0/"
 });
 
 type addedUserResponseType = {

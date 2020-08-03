@@ -10,9 +10,9 @@ const rootReducer = combineReducers({
     singInReducer: signInReducer
 });
 
-// @ts-ignore
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 export let store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 export type AppStateType = ReturnType<typeof rootReducer>
 
+export type InferActionTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U } ? U : never

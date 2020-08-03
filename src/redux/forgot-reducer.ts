@@ -6,7 +6,6 @@ import {forgotPageAPI} from "../api/forgot-page";
 let initialState = {
     success: false,
     errorMessage: "",
-    testEmail: "test@gmail.com"
 }
 
 //Reducer
@@ -53,12 +52,12 @@ export const changePassword = (email: string): ThunkType => async (dispatch) => 
         let data = await forgotPageAPI.forgot(email);
         dispatch(setChangePasswordSuccess(data.success))
     } catch (e) {
-        let error = e.response.data.error;
-        dispatch(setChangePasswordError(error));
+        dispatch(setChangePasswordError(e.response.data.error));
         console.log(e.message)
     }
 }
 
+//Types
 type ActionsType = setChangePasswordSuccessType | setChangePasswordErrorType
 type InitialState = typeof initialState
 type ThunkType = ThunkAction<Promise<void>, AppStateType, {}, ActionsType>

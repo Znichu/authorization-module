@@ -1,4 +1,4 @@
-import {authAPI} from "../components/api/signInApi";
+import {authAPI} from '../api/signInApi';
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./store";
 

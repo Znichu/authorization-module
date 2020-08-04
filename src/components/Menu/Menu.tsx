@@ -21,6 +21,9 @@ export function HeaderMenu() {
             <Menu.Item key="set-new-pass">
                 <NavLink to='/set-new-password'>Set new pass</NavLink>
             </Menu.Item>
+            <Menu.Item key="packs">
+                <NavLink to='/cards/pack'>Packs</NavLink>
+            </Menu.Item>
         </Menu>
     )
 }

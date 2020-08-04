@@ -7,6 +7,7 @@ import {SignIn} from "./components/Sign-In/SignIn";
 import {Register} from "./components/Register/Register";
 import {Forgot} from "./components/Forgot/Forgot";
 import {SetNewPass} from "./components/Set-New-Pass/SetNewPass";
+import { Packs } from './components/Packs/Packs';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path='/register' render={() => <Register/>}/>
                 <Route path='/forgot' render={() => <Forgot/>}/>
                 <Route path='/set-new-password' render={() => <SetNewPass/>}/>
+                <Route path='/cards/pack' render={() => <Packs/>}/>
                 </Switch>
             </div>
     );

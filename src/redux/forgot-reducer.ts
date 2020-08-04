@@ -1,6 +1,7 @@
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./store";
 import {forgotPageAPI} from "../api/forgot-page";
+import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
 
 //State
 let initialState = {
@@ -50,6 +51,9 @@ const setChangePasswordError = (errorMessage: string): setChangePasswordErrorTyp
 export const changePassword = (email: string): ThunkType => async (dispatch) => {
     try {
         let data = await forgotPageAPI.forgot(email);
+        let result = data.html.match(/(.*)set-new-password'(.*?)>(.*)/);
+        const resetPasswordToken = result[2];
+        saveTokenInCookie.set('resetPasswordToken', resetPasswordToken);
         dispatch(setChangePasswordSuccess(data.success))
     } catch (e) {
         dispatch(setChangePasswordError(e.response.data.error));

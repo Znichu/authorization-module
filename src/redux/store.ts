@@ -10,8 +10,8 @@ const rootReducer = combineReducers({
     singInReducer: signInReducer
 });
 
-// const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-export let store = createStore(rootReducer, applyMiddleware(thunk));
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+export let store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 export type AppStateType = ReturnType<typeof rootReducer>
 

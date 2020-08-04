@@ -1,6 +1,7 @@
 import {AppStateType, InferActionTypes} from "./store";
 import {ThunkAction} from "redux-thunk";
 import {resetPasswordApi} from "../api/resetPasswordApi";
+import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
 
 let initialState = {
     success: false,
@@ -34,8 +35,9 @@ const actions = {
 }
 
 //Thunk
-export const resetPassword = (resetPasswordToken: string, password: string): ThunkType => async (dispatch) => {
+export const resetPassword = (password: string): ThunkType => async (dispatch) => {
     try {
+        const resetPasswordToken = saveTokenInCookie.get('resetPasswordToken');
         let data = await resetPasswordApi.resetPassword(resetPasswordToken, password);
         dispatch(actions.setNewPassSuccess(data))
     } catch (e) {

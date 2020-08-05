@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:7542/1.0/'
-    /*baseURL: "https://cards-nya-back.herokuapp.com/1.0/"*/
+    /*baseURL: 'http://localhost:7542/1.0/'*/
+    baseURL: "https://cards-nya-back.herokuapp.com/1.0/"
 });
 
 type ResponseType = {
@@ -23,11 +23,9 @@ export const authAPI = {
     signIn(email: string, password: string, rememberMe: boolean) {
         return instance.post<ResponseType>(`auth/login`, {email, password, rememberMe})
             .then(res => res.data)
-            .catch(e => e)
     },
-    signOut() {
-        return instance.delete(`auth/login`)
+    getAuth (token: string) {
+        return instance.post(`auth/me`, {token})
             .then(res => res.data)
-            .catch(e => e)
     }
 };

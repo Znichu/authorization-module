@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {HeaderMenu} from "./components/Menu/Menu";
 import {Route, Switch} from 'react-router-dom';
@@ -7,21 +7,27 @@ import {SignIn} from "./components/Sign-In/SignIn";
 import {Register} from "./components/Register/Register";
 import {Forgot} from "./components/Forgot/Forgot";
 import {SetNewPass} from "./components/Set-New-Pass/SetNewPass";
+import {useDispatch} from "react-redux";
+import {getAuthData} from "./redux/auth-reducer";
+
 
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getAuthData())
+    })
     return (
 
-            <div className='main'>
-                <HeaderMenu/>
-                <Switch>
-                {/*<Route path='/' render={() => <Redirect to="/sign-in"/>}/>*/}
-                <Route path='/profile' render={() => <Profile/>}/>
+        <div className='main'>
+            <HeaderMenu/>
+            <Switch>
+                <Route path='/profile' render={() => <Profile />}/>
                 <Route path='/sign-in' render={() => <SignIn/>}/>
                 <Route path='/register' render={() => <Register/>}/>
                 <Route path='/forgot' render={() => <Forgot/>}/>
                 <Route path='/set-new-password' render={() => <SetNewPass/>}/>
-                </Switch>
-            </div>
+            </Switch>
+        </div>
     );
 }
 

@@ -9,7 +9,7 @@ let initialState = {
 }
 
 //Reducer
-export const SetNewPass = (state: InitialState = initialState, action: ActionTypes) => {
+export const SetNewPassReducer = (state: InitialState = initialState, action: ActionTypes) => {
     switch (action.type) {
         case "RESET/SET_NEW_PASS_SUCCESS": {
             return {

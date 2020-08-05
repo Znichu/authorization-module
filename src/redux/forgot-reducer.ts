@@ -15,7 +15,7 @@ export const forgotReducer = (state: InitialState = initialState, action: Action
         case 'FORGOTPAGE/CHANGE_PASSWORD_SUCCESS': {
             return {
                 ...state,
-                success: action.success
+                success: action.success,
             }
         }
         case 'FORGOTPAGE/CHANGE_PASSWORD_ERROR': {

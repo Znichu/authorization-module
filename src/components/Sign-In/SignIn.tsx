@@ -3,7 +3,7 @@ import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
 import {Alert, Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {signIn} from "../../redux/sign-in-reducer";
+import {actions, signIn} from "../../redux/sign-in-reducer";
 import {AppStateType} from "../../redux/store";
 import {Redirect, Link} from 'react-router-dom';
 import style from './SignIn.module.css'
@@ -30,7 +30,9 @@ export const SignIn = () => {
     };
 
     //checking logged user or not
-    const isAuth = useSelector((state: AppStateType) => state.singInReducer.success);
+    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
+    const loading = useSelector((state: AppStateType) => state.singInReducer.isFetching);
+    const errorMessage = useSelector((state: AppStateType) => state.singInReducer.errorMessage);
 
 
     if (isAuth) {
@@ -39,6 +41,7 @@ export const SignIn = () => {
 
     return (
         <div className={style.signInPage}>
+
             <div>
                 <h3>SignIn</h3>
             </div>
@@ -62,13 +65,14 @@ export const SignIn = () => {
                     {errors.password && <Alert message="Password is required" type="error" showIcon/>}
                 </div>
 
-                <Link to='/forgot'>Forgot password?</Link>
+                <Link to='/forgot'>Forgot your password?</Link>
                 <div>
                     <input type='checkbox' name='rememberMe' ref={register}/>
                     {` Remember me`}
                 </div>
-                <Button htmlType='submit' type='primary'>Sign In</Button>
+                <Button loading={loading} htmlType='submit' type='primary'>Sign In</Button>
             </form>
+            <span>or</span>
             <Link to='/register'>Registration</Link>
         </div>
     );

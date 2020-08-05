@@ -12,14 +12,11 @@ export function HeaderMenu() {
             <Menu.Item key="sign-in">
                 <NavLink to='/sign-in'>Sign-in</NavLink>
             </Menu.Item>
-            <Menu.Item key="register">
-                <NavLink to='/register'>Register</NavLink>
-            </Menu.Item>
             <Menu.Item key="forgot">
-                <NavLink to='/forgot'>Forgot</NavLink>
+                <NavLink to='/packs'>Packs</NavLink>
             </Menu.Item>
             <Menu.Item key="set-new-pass">
-                <NavLink to='/set-new-password'>Set new pass</NavLink>
+                <NavLink to='/cards'>Cards</NavLink>
             </Menu.Item>
         </Menu>
     )

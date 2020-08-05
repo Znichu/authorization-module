@@ -3,10 +3,14 @@ import thunk from "redux-thunk";
 import {forgotReducer} from "./forgot-reducer";
 import { registerReducer } from "./register-reducer";
 import signInReducer from "./sign-in-reducer";
+import {AuthReducer} from "./auth-reducer";
+import {SetNewPassReducer} from "./set-new-pass-reducer";
 
 const rootReducer = combineReducers({
     forgotPage: forgotReducer,
     register: registerReducer,
+    auth: AuthReducer,
+    restPass: SetNewPassReducer,
     singInReducer: signInReducer
 });
 

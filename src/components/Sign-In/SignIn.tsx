@@ -16,11 +16,11 @@ type  LoginData = {
     email: string;
     password: string;
     rememberMe: boolean
-}
+};
 
 //validation
 const schema = yup.object().shape({
-    email: yup.string().required().min(2),
+    email: yup.string().required().email().min(2),
     password: yup.string().required().min(8),
 });
 
@@ -53,12 +53,14 @@ export const SignIn = (props: Props) => {
                             <div>
                                 <label>Login: </label>
                                 <input name="email" type="text" ref={register}/>
-                                {errors.email && <Alert message="Login is required" type="error" showIcon/>}
+                                {errors.email ? <Alert message={errors.email?.message} type="error" showIcon/>
+                                    : null}
                             </div>
                             <div>
                                 <label>Password: </label>
                                 <input name="password" type="password" ref={register}/>
-                                {errors.password && <Alert message="Password is required" type="error" showIcon/>}
+                                {errors.password ? <Alert message={errors.password?.message} type="error" showIcon/>
+                                    : null}
                             </div>
                             <div>
                                 <input type="checkbox" name="rememberMe" ref={register}/>
@@ -72,3 +74,10 @@ export const SignIn = (props: Props) => {
         </>
     );
 };
+
+//login data
+// {
+//     "email": "sindzi@gmail.com",
+//     "password": "987654321",
+//     "rememberMe": true
+// }

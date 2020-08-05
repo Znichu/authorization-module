@@ -37,7 +37,7 @@ const initialState: initialStateType = {
 
 
 //reducer
-const signInReducer = (state = initialState, action: setAuthUserDataSuccessType) => {
+export const signInReducer = (state = initialState, action: setAuthUserDataSuccessType) => {
     switch (action.type) {
         case SET_USER_DATA: {
             return {
@@ -97,4 +97,3 @@ export const signOut = (): ThunkType => async (dispatch) => {
 };
 
 
-export default signInReducer;

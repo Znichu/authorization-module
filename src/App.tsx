@@ -7,21 +7,24 @@ import {SignIn} from "./components/Sign-In/SignIn";
 import {Register} from "./components/Register/Register";
 import {Forgot} from "./components/Forgot/Forgot";
 import {SetNewPass} from "./components/Set-New-Pass/SetNewPass";
+import Cards from "./components/Cards/Cards";
 
 function App() {
     return (
 
-            <div className='main'>
-                <HeaderMenu/>
-                <Switch>
+        <div className='main'>
+            <HeaderMenu/>
+            <Switch>
                 {/*<Route path='/' render={() => <Redirect to="/sign-in"/>}/>*/}
                 <Route path='/profile' render={() => <Profile/>}/>
                 <Route path='/sign-in' render={() => <SignIn/>}/>
                 <Route path='/register' render={() => <Register/>}/>
                 <Route path='/forgot' render={() => <Forgot/>}/>
                 <Route path='/set-new-password' render={() => <SetNewPass/>}/>
-                </Switch>
-            </div>
+                <Route path='/cards' render={() => <Cards/>}/>
+
+            </Switch>
+        </div>
     );
 }
 

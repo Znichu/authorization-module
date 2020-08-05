@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'antd/dist/antd.css';
-import { Menu } from 'antd';
-import { NavLink } from "react-router-dom";
+import {Menu} from 'antd';
+import {NavLink} from "react-router-dom";
 
 export function HeaderMenu() {
     return (
@@ -20,6 +20,9 @@ export function HeaderMenu() {
             </Menu.Item>
             <Menu.Item key="set-new-pass">
                 <NavLink to='/set-new-password'>Set new pass</NavLink>
+            </Menu.Item>
+            <Menu.Item key="Cards">
+                <NavLink to='/cards'>Cards</NavLink>
             </Menu.Item>
         </Menu>
     )

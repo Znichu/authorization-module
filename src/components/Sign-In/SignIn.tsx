@@ -72,4 +72,4 @@ export const SignIn = () => {
             <Link to='/register'>Registration</Link>
         </div>
     );
-}
+};

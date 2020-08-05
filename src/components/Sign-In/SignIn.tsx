@@ -1,83 +1,75 @@
-import * as React from 'react';
-import {useForm} from "react-hook-form";
+import React from 'react';
+import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
-import * as yup from "yup";
-import {Alert} from "antd";
+import {Alert, Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {signIn} from "../../redux/sign-in-reducer";
 import {AppStateType} from "../../redux/store";
-import {Redirect} from 'react-router-dom';
-
-
-type Props = {};
+import {Redirect, Link} from 'react-router-dom';
+import style from './SignIn.module.css'
+import {schemaSignInForm} from "../../utils/validators/validators";
 
 //react-hook-form
 type  LoginData = {
     email: string;
     password: string;
     rememberMe: boolean
-};
-
-//validation
-const schema = yup.object().shape({
-    email: yup.string().required().email().min(2),
-    password: yup.string().required().min(8),
-});
+}
 
 //using hook
-export const SignIn = (props: Props) => {
+export const SignIn = () => {
     const dispatch = useDispatch();
-    const {register, handleSubmit, errors} = useForm<LoginData>({
-        resolver: yupResolver(schema)
+    const {register, handleSubmit, errors, control} = useForm<LoginData>({
+        resolver: yupResolver(schemaSignInForm)
     });
 
 //dispatch thunk
     const onSubmit = (data: LoginData) => {
         let {email, password, rememberMe} = data;
         dispatch(signIn(email, password, rememberMe));
-        console.log(data);
     };
 
     //checking logged user or not
     const isAuth = useSelector((state: AppStateType) => state.singInReducer.success);
 
-    return (
-        <>
-            {!isAuth ?
-                <div>
-                    <div>
-                        <h3>SignIn</h3>
-                    </div>
-                    <div>
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <div>
-                                <label>Login: </label>
-                                <input name="email" type="text" ref={register}/>
-                                {errors.email ? <Alert message={errors.email?.message} type="error" showIcon/>
-                                    : null}
-                            </div>
-                            <div>
-                                <label>Password: </label>
-                                <input name="password" type="password" ref={register}/>
-                                {errors.password ? <Alert message={errors.password?.message} type="error" showIcon/>
-                                    : null}
-                            </div>
-                            <div>
-                                <input type="checkbox" name="rememberMe" ref={register}/>
-                                {'Remember me'}
-                            </div>
-                            <button type="submit">Enter</button>
-                        </form>
-                    </div>
-                </div>
-                : <Redirect to={`/profile`}/>}
-        </>
-    );
-};
 
-//login data
-// {
-//     "email": "sindzi@gmail.com",
-//     "password": "987654321",
-//     "rememberMe": true
-// }
+    if (isAuth) {
+        return <Redirect to={`/profile`}/>
+    }
+
+    return (
+        <div className={style.signInPage}>
+            <div>
+                <h3>SignIn</h3>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)} className={style.signInPage__form}>
+                <div>
+                    <Controller
+                        as={Input}
+                        name="email"
+                        control={control}
+                        placeholder="Email"
+                    />
+                    {errors.email && <Alert message="Login is required" type="error" showIcon/>}
+                </div>
+                <div>
+                    <Controller
+                        as={Input.Password}
+                        name="password"
+                        control={control}
+                        placeholder="Password"
+                    />
+                    {errors.password && <Alert message="Password is required" type="error" showIcon/>}
+                </div>
+
+                <Link to='/forgot'>Forgot password?</Link>
+                <div>
+                    <input type='checkbox' name='rememberMe' ref={register}/>
+                    {` Remember me`}
+                </div>
+                <Button htmlType='submit' type='primary'>Sign In</Button>
+            </form>
+            <Link to='/register'>Registration</Link>
+        </div>
+    );
+}

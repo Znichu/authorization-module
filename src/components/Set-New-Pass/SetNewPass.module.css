@@ -1,0 +1,21 @@
+.setNewPassPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.setNewPassPage__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 350px;
+    margin: 0 0 15px 0;
+}
+
+.setNewPassPage__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}

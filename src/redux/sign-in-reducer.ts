@@ -1,6 +1,7 @@
-import {authAPI} from "../components/api/signInApi";
+import {authAPI} from '../api/signInApi';
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./store";
+import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
 
 const SET_USER_DATA = 'SET_USER_DATA';
 
@@ -64,10 +65,15 @@ export const setAuthUserDataSuccess = (data: initialStateType): setAuthUserDataS
 
 //thunk to login
 export const signIn = (email: string, password: string, rememberMe: boolean): ThunkType => async (dispatch) => {
-    let data = await authAPI.signIn(email, password, rememberMe);
-    if (data.success) {
+    try {
+        let data = await authAPI.signIn(email, password, rememberMe);
+        saveTokenInCookie.set('auth_token', data.token);
         dispatch(setAuthUserDataSuccess(data))
+    } catch (e) {
+        console.log(e.message)
     }
+
+
 };
 
 //thunk to logout

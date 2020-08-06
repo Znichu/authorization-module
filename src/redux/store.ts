@@ -3,11 +3,13 @@ import thunk from "redux-thunk";
 import {forgotReducer} from "./forgot-reducer";
 import { registerReducer } from "./register-reducer";
 import signInReducer from "./sign-in-reducer";
+import cardsReducer from "./cards-reducer";
 
 const rootReducer = combineReducers({
     forgotPage: forgotReducer,
     register: registerReducer,
-    singInReducer: signInReducer
+    singInReducer: signInReducer,
+    cardsReducer : cardsReducer
 });
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

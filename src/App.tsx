@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import {HeaderMenu} from "./components/Menu/Menu";
-import {Route, Redirect, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {Profile} from "./components/Profile/Profile";
 import {SignIn} from "./components/Sign-In/SignIn";
 import {Register} from "./components/Register/Register";

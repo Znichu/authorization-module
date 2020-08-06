@@ -1,91 +1,63 @@
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import {AppStateType} from "./store";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType, InferActionTypes} from "./store";
 import {packsAPI} from "../api/packsApi";
 import saveTokenInCookie from '../utils/CookieToken/SaveTokenCookie'
+import {cardPack, cardPacksDataType, packsGetDataType} from "../utils/Types/PacksTypes/PacksTypes";
+
+const SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS';
 
 
-// const SET_USER_DATA_SUCCESS = 'authorization-module-project/registerReducer/SET_USER_DATA_SUCCESS';
-
-type cardPack = {
-    cardsCount: number | null;
-    created: string | null;
-    grade: number | null;
-    name: string | null;
-    path: string | null;
-    private: boolean;
-    rating: number | null;
-    shots: number | null;
-    type: string | null;
-    updated: string | null;
-    user_id: string | null;
-    user_name: string | null;
-    __v: number | null;
-    _id: string | null;
-}
-
-type initialState = {
-    cardPacks: Array<cardPack>;
-    cardPacksTotalCount: number | null;
-    maxGrade: number | null;
-    minGrade: number | null;
-    page: number | null;
-    pageCount: number | null;
-    token: string | null;
-    tokenDeathTime: number | null;
+const initialState = {
+    cardPacks: [] as (Array<cardPack>),
+    cardPacksTotalCount: null as (number | null),
+    page: null as (number | null),
+    pageCount: null as (number | null),
+    sortPacks: 0
 };
 
-const initialState: initialState = {
-    cardPacks: [],
-    cardPacksTotalCount: null,
-    maxGrade: null,
-    minGrade: null,
-    page: null,
-    pageCount: null,
-    token: null,
-    tokenDeathTime: null,
-};
-
-export const packsReducer = (state: initialState = initialState, action: any) => {
+export const packsReducer = (state: InitialStateType = initialState, action: ActionTypes) => {
 
     switch (action.type) {
 
-        // case SET_USER_DATA_SUCCESS: {
-        //     return {
-        //         ...state,
-        //
-        //     };
-        // }
+        case SET_CARD_PACKS: {
+            return {
+                ...state,
+                ...action.payload,
+                cardPacks: [...action.payload.cardPacks]
+            }
+        }
 
         default:
             return state;
     }
 };
 
+
 //Actions
-// type InferPacksActionTypes<T> = T extends {[key: string]: infer U} ? U : never;
-// type PacksActionTypes = ReturnType<InferPacksActionTypes<typeof actions>>
 
 const actions = {
-    // registerUserDataSuccess : (userData: initialState) => ({type: SET_USER_DATA_SUCCESS, payload: {...userData}} as const),
+    setCardPacksSuccess: (cardPacksData: cardPacksDataType) => ({
+        type: SET_CARD_PACKS,
+        payload: {...cardPacksData}
+    } as const),
 }
 
 //Thunks
-// type ThunkType = ThunkAction<void, AppStateType, {}, PacksActionTypes>
-// type ThunkDispatchType = ThunkDispatch<AppStateType, {}, PacksActionTypes>
 
-export const getPacksThunk = (packsGetData: any): any => async (dispatch: any) => {
+export const getPacksThunk = (packsGetData: packsGetDataType): ThunkType => async (dispatch) => {
 
-    let {
+    const {
         packName = null,
         min = null,
         max = null,
-        sortPacks = null,
-        page = null,
-        pageCount = null,
+        sortPacks = 0,
+        page = 1,
+        pageCount = 10,
         user_id = null
     } = packsGetData;
 
-    const token = saveTokenInCookie.get('auth_token');
+
+    const token = saveTokenInCookie.get('auth_token') || null;
 
     const packsQueryParamsArr = ['?'];
 
@@ -98,13 +70,22 @@ export const getPacksThunk = (packsGetData: any): any => async (dispatch: any) =
     token && packsQueryParamsArr.push(`token=${token}`);
     user_id && packsQueryParamsArr.push(`user_id=${user_id}`);
 
-    const resultPacksQueryParams = packsQueryParamsArr.length === 1 ? '' : packsQueryParamsArr.join('&').replace(/\?&/, '?');
+    const resultPacksQueryParams = packsQueryParamsArr.join('&').replace(/\?&/, '?');
+
 
     try {
-        const data = await packsAPI.getPacks(resultPacksQueryParams);
-        saveTokenInCookie.set('auth_token', data.token);
+        const cardPacksData = await packsAPI.getCardPacks(resultPacksQueryParams);
+        const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData
+        saveTokenInCookie.set('auth_token', token);
+        dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
+
     } catch (e) {
         console.log(e);
     }
 
 };
+
+//Types
+type InitialStateType = typeof initialState
+type ActionTypes = InferActionTypes<typeof actions>
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>

@@ -35,9 +35,9 @@ export const SignIn = () => {
     const errorMessage = useSelector((state: AppStateType) => state.singInReducer.errorMessage);
 
 
-    if (isAuth) {
+/*    if (isAuth) {
         return <Redirect to={`/profile`}/>
-    }
+    }*/
 
     return (
         <div className={style.signInPage}>

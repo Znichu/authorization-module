@@ -1,5 +1,5 @@
 import {ThunkAction} from "redux-thunk";
-import {AppStateType} from "./store";
+import {AppStateType, InferActionTypes} from "./store";
 import {forgotPageAPI} from "../api/forgot-page";
 import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
 
@@ -7,10 +7,11 @@ import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
 let initialState = {
     success: false,
     errorMessage: "",
+    isFetching: false,
 }
 
 //Reducer
-export const forgotReducer = (state: InitialState = initialState, action: ActionsType) => {
+export const forgotReducer = (state: InitialState = initialState, action: ActionTypes) => {
     switch (action.type) {
         case 'FORGOTPAGE/CHANGE_PASSWORD_SUCCESS': {
             return {
@@ -24,44 +25,48 @@ export const forgotReducer = (state: InitialState = initialState, action: Action
                 errorMessage: action.errorMessage
             }
         }
+        case "FORGOTPAGE/TOGGLE_IS_FETCHING": {
+            return {
+                ...state,
+                isFetching: action.isFetching
+            }
+        }
         default:
             return state
     }
 }
 
 //Action
-type setChangePasswordSuccessType = {
-    type: 'FORGOTPAGE/CHANGE_PASSWORD_SUCCESS'
-    success: boolean
+const action = {
+    setChangePasswordSuccess: (success: boolean) => ({
+        type: 'FORGOTPAGE/CHANGE_PASSWORD_SUCCESS',
+        success
+    } as const ),
+    setChangePasswordError: (errorMessage: string) => ({
+        type: 'FORGOTPAGE/CHANGE_PASSWORD_ERROR',
+        errorMessage
+    } as const ),
+    toggleIsFetching: (isFetching: boolean) => ({type: "FORGOTPAGE/TOGGLE_IS_FETCHING", isFetching} as const )
 }
-const setChangePasswordSuccess = (success: boolean): setChangePasswordSuccessType => ({
-    type: 'FORGOTPAGE/CHANGE_PASSWORD_SUCCESS',
-    success
-});
-type setChangePasswordErrorType = {
-    type: 'FORGOTPAGE/CHANGE_PASSWORD_ERROR'
-    errorMessage: string
-}
-const setChangePasswordError = (errorMessage: string): setChangePasswordErrorType => ({
-    type: 'FORGOTPAGE/CHANGE_PASSWORD_ERROR',
-    errorMessage
-});
 
 //Thunk
 export const changePassword = (email: string): ThunkType => async (dispatch) => {
     try {
+        dispatch(action.toggleIsFetching(true));
+        dispatch(action.setChangePasswordError(""));
         let data = await forgotPageAPI.forgot(email);
         let result = data.html.match(/(.*)set-new-password'(.*?)>(.*)/);
         const resetPasswordToken = result[2];
         saveTokenInCookie.set('resetPasswordToken', resetPasswordToken);
-        dispatch(setChangePasswordSuccess(data.success))
+        dispatch(action.setChangePasswordSuccess(data.success))
     } catch (e) {
-        dispatch(setChangePasswordError(e.response.data.error));
+        dispatch(action.setChangePasswordError(e.response.data.error));
         console.log(e.message)
     }
+    dispatch(action.toggleIsFetching(false))
 }
 
 //Types
-type ActionsType = setChangePasswordSuccessType | setChangePasswordErrorType
+type ActionTypes = InferActionTypes <typeof action>
 type InitialState = typeof initialState
-type ThunkType = ThunkAction<Promise<void>, AppStateType, {}, ActionsType>
+type ThunkType = ThunkAction<Promise<void>, AppStateType, {}, ActionTypes>

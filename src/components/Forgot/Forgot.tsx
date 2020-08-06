@@ -20,6 +20,7 @@ export const Forgot: React.FC = () => {
     };
 
     const errorMessage = useSelector((state: AppStateType) => state.forgotPage.errorMessage);
+    const isFetching = useSelector((state: AppStateType) => state.forgotPage.isFetching);
     const dispatch = useDispatch();
     const resetPassword = useCallback(
         (data) => dispatch( changePassword(data) ),
@@ -29,7 +30,7 @@ export const Forgot: React.FC = () => {
     return (
         <div className={style.forgotPage}>
             { errorMessage &&
-            <Alert message={errorMessage} type="warning" showIcon closable />
+            <Alert message={errorMessage} type="warning" showIcon />
             }
             <h3>Forgot password?</h3>
             <span>Please enter <b>email</b> that you used to sign in</span>
@@ -46,7 +47,7 @@ export const Forgot: React.FC = () => {
                     control={control}
                     placeholder="Email"
                 />
-                <Button htmlType="submit" type='primary'>Send email</Button>
+                <Button loading={isFetching} htmlType="submit" type='primary'>Send email</Button>
             </form>
             <Link to={'/sign-in'}>Sign In</Link>
         </div>

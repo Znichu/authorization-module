@@ -24,10 +24,7 @@ export const Forgot: React.FC = () => {
 /*    const isFetching = useSelector((state: AppStateType) => state.forgotPage.isFetching);
     const success = useSelector((state: AppStateType) => state.forgotPage.success);*/
     const dispatch = useDispatch();
-    const resetPassword = useCallback(
-        (data) => dispatch(changePassword(data)),
-        [dispatch]
-    )
+    const resetPassword = useCallback((data) => dispatch(changePassword(data)), [dispatch])
     console.log("Render Forgot");
 
     return (
@@ -52,7 +49,7 @@ export const Forgot: React.FC = () => {
                 />
                 <Button loading={isFetching} htmlType="submit" type='primary'>Send email</Button>
             </form>
-            {success ? ModalSuccess() : null}
+            {!success ? <ModalSuccess/> : null}
             <Link to={'/sign-in'}>Sign In</Link>
         </div>
     );

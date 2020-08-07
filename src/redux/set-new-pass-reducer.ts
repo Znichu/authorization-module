@@ -5,7 +5,8 @@ import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
 
 let initialState = {
     success: false,
-    errorMessage: ""
+    errorMessage: "",
+    isFetching: false
 }
 
 //Reducer
@@ -23,6 +24,12 @@ export const SetNewPassReducer = (state: InitialState = initialState, action: Ac
                 errorMessage: action.message
             }
         }
+        case "RESET/TOGGLE_IS_FETCHING": {
+            return {
+                ...state,
+                isFetching: action.isFetching
+            }
+        }
         default:
             return state
     }
@@ -31,12 +38,14 @@ export const SetNewPassReducer = (state: InitialState = initialState, action: Ac
 //Actions
 const actions = {
     setNewPassSuccess: (success: boolean) => ({type: "RESET/SET_NEW_PASS_SUCCESS", success} as const),
-    setNewPassError: (message: string) => ({type: "RESET/SET_NEW_PASS_ERROR", message} as const)
+    setNewPassError: (message: string) => ({type: "RESET/SET_NEW_PASS_ERROR", message} as const),
+    toggleIsFetching: (isFetching: boolean) => ({type: "RESET/TOGGLE_IS_FETCHING", isFetching} as const )
 }
 
 //Thunk
 export const resetPassword = (password: string): ThunkType => async (dispatch) => {
     try {
+        dispatch(actions.toggleIsFetching(true))
         const resetPasswordToken = saveTokenInCookie.get('resetPasswordToken');
         let data = await resetPasswordApi.resetPassword(resetPasswordToken, password);
         dispatch(actions.setNewPassSuccess(data))
@@ -44,6 +53,7 @@ export const resetPassword = (password: string): ThunkType => async (dispatch) =
         dispatch(actions.setNewPassError(e.response.data.error));
         console.log(e.message)
     }
+    dispatch(actions.toggleIsFetching(false))
 }
 
 

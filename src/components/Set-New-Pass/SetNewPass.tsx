@@ -4,8 +4,10 @@ import {Controller, useForm} from "react-hook-form";
 import {Button, Input} from "antd";
 import {yupResolver} from "@hookform/resolvers";
 import {schemaSetNewPassForm} from "../../utils/validators/validators";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {resetPassword} from "../../redux/set-new-pass-reducer";
+import {AppStateType} from "../../redux/store";
+import {Redirect} from 'react-router-dom';
 
 type SetNewPassType = {
     password: string
@@ -21,13 +23,17 @@ export const SetNewPass = () => {
         sendNewPass(data.password);
         console.log(data)
     };
+    const {success, isFetching} = useSelector((state: AppStateType) => state.restPass);
 
     const dispatch = useDispatch();
     const sendNewPass = useCallback(
-        (data) => dispatch( resetPassword(data) ),
+        (data) => dispatch(resetPassword(data)),
         [dispatch]
     )
 
+    if (success) {
+        return <Redirect to='/sign-in'/>
+    }
     return (
         <div className={style.setNewPassPage}>
             <div className={style.setNewPassPage__info}>
@@ -52,7 +58,7 @@ export const SetNewPass = () => {
                     placeholder="Confirm password"
                 />
                 <p>{errors.passwordConfirmation?.message}</p>
-                <Button htmlType='submit' type="primary">Continue</Button>
+                <Button loading={isFetching} htmlType='submit' type="primary">Continue</Button>
             </form>
         </div>
     );

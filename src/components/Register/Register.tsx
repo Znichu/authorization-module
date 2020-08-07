@@ -10,8 +10,6 @@ import {Button, Input} from "antd";
 import style from './Register.module.css'
 import {schemaRegisterForm} from "../../utils/validators/validators";
 
-
-
 type IFormInputs = {
     email: string,
     password: string,
@@ -24,7 +22,7 @@ export const Register = () => {
 
     const dispatch = useDispatch();
 
-    const {handleSubmit, errors, control} = useForm<IFormInputs>({
+    const {handleSubmit, errors, control, reset} = useForm<IFormInputs>({
         resolver: yupResolver(schemaRegisterForm)
     });
 
@@ -70,7 +68,7 @@ export const Register = () => {
                     placeholder="Confirm password"
                 />
                 <p>{errors.passwordConfirmation?.message}</p>
-                <Button htmlType='submit' type="primary">Register</Button>
+                <Button onClick={ () => reset() } htmlType='submit' type="primary">Register</Button>
             </form>
             <Link to='/sign-in'>Sign In</Link>
         </div>

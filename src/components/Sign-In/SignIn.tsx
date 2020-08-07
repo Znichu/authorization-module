@@ -3,7 +3,7 @@ import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
 import {Alert, Button, Input} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {actions, signIn} from "../../redux/sign-in-reducer";
+import {signIn} from "../../redux/sign-in-reducer";
 import {AppStateType} from "../../redux/store";
 import {Redirect, Link} from 'react-router-dom';
 import style from './SignIn.module.css'
@@ -19,7 +19,7 @@ type  LoginData = {
 //using hook
 export const SignIn = () => {
     const dispatch = useDispatch();
-    const {register, handleSubmit, errors, control} = useForm<LoginData>({
+    const {register, handleSubmit, errors, control, reset} = useForm<LoginData>({
         resolver: yupResolver(schemaSignInForm)
     });
 
@@ -31,13 +31,12 @@ export const SignIn = () => {
 
     //checking logged user or not
     const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
-    const loading = useSelector((state: AppStateType) => state.singInReducer.isFetching);
-    const errorMessage = useSelector((state: AppStateType) => state.singInReducer.errorMessage);
+    const {isFetching, errorMessage} = useSelector((state: AppStateType) => state.singInReducer);
 
 
-/*    if (isAuth) {
+    if (isAuth) {
         return <Redirect to={`/profile`}/>
-    }*/
+    }
 
     return (
         <div className={style.signInPage}>
@@ -70,7 +69,7 @@ export const SignIn = () => {
                     <input type='checkbox' name='rememberMe' ref={register}/>
                     {` Remember me`}
                 </div>
-                <Button loading={loading} htmlType='submit' type='primary'>Sign In</Button>
+                <Button onClick={ () => reset() } loading={isFetching} htmlType='submit' type='primary'>Sign In</Button>
             </form>
             <span>or</span>
             <Link to='/register'>Registration</Link>

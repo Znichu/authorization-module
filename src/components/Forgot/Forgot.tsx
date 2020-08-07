@@ -8,17 +8,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
 import {changePassword} from "../../redux/forgot-reducer";
 import {schemaForgotPage} from '../../utils/validators/validators';
-import {Success} from './ModalSuccess/ModalSuccess';
-import {date} from "yup";
+import {Success} from '../Success/Success';
 
 type InputEmailType = {
     email: string
 }
 
 export const Forgot: React.FC = () => {
-    const {handleSubmit, errors, control} = useForm<InputEmailType>({resolver: yupResolver(schemaForgotPage)});
+    const {handleSubmit, errors, control, reset} = useForm<InputEmailType>({resolver: yupResolver(schemaForgotPage)});
     const onSubmit = (data: InputEmailType) => {
         resetPassword(data.email);
+
+
     };
 
     const {errorMessage, isFetching, success} = useSelector((state: AppStateType) => state.forgotPage);
@@ -50,7 +51,7 @@ export const Forgot: React.FC = () => {
                     control={control}
                     placeholder="Email"
                 />
-                <Button loading={isFetching} htmlType="submit" type='primary'>Send email</Button>
+                <Button onClick={() => reset()} loading={isFetching} htmlType="submit" type='primary'>Send email</Button>
             </form>
             <Link to={'/sign-in'}>Sign In</Link>
         </div>

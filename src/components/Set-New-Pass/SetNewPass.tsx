@@ -16,12 +16,11 @@ type SetNewPassType = {
 
 export const SetNewPass = () => {
 
-    const {handleSubmit, errors, control} = useForm<SetNewPassType>({
+    const {handleSubmit, errors, control, reset} = useForm<SetNewPassType>({
         resolver: yupResolver(schemaSetNewPassForm)
     });
     const onSubmit = (data: SetNewPassType) => {
         sendNewPass(data.password);
-        console.log(data)
     };
     const {success, isFetching} = useSelector((state: AppStateType) => state.restPass);
 
@@ -58,7 +57,7 @@ export const SetNewPass = () => {
                     placeholder="Confirm password"
                 />
                 <p>{errors.passwordConfirmation?.message}</p>
-                <Button loading={isFetching} htmlType='submit' type="primary">Continue</Button>
+                <Button onClick={ () => reset() } loading={isFetching} htmlType='submit' type="primary">Continue</Button>
             </form>
         </div>
     );

@@ -8,7 +8,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
 import {changePassword} from "../../redux/forgot-reducer";
 import {schemaForgotPage} from '../../utils/validators/validators';
-import {ModalSuccess} from './ModalSuccess/ModalSuccess';
+import {Success} from './ModalSuccess/ModalSuccess';
+import {date} from "yup";
 
 type InputEmailType = {
     email: string
@@ -21,11 +22,13 @@ export const Forgot: React.FC = () => {
     };
 
     const {errorMessage, isFetching, success} = useSelector((state: AppStateType) => state.forgotPage);
-/*    const isFetching = useSelector((state: AppStateType) => state.forgotPage.isFetching);
-    const success = useSelector((state: AppStateType) => state.forgotPage.success);*/
     const dispatch = useDispatch();
     const resetPassword = useCallback((data) => dispatch(changePassword(data)), [dispatch])
     console.log("Render Forgot");
+
+    if (success) {
+        return <Success />
+    }
 
     return (
         <div className={style.forgotPage}>
@@ -49,7 +52,6 @@ export const Forgot: React.FC = () => {
                 />
                 <Button loading={isFetching} htmlType="submit" type='primary'>Send email</Button>
             </form>
-            {!success ? <ModalSuccess/> : null}
             <Link to={'/sign-in'}>Sign In</Link>
         </div>
     );

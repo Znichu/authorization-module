@@ -1,12 +1,14 @@
 import React from "react";
-import style from "./ModalSuccess.module.css"
+import {Result} from "antd";
 
 
-export function ModalSuccess() {
-   return (
-       <div className={style.awesomeModal} id="modal1"><a className={style.closeIcon} href="#close"></a>
-           <h3 className={style.modalTitle}>Modal 1</h3>
-           <p>Hi! I am a nice modal :)</p><a className={style.btn} href="#close">OK</a>
-       </div>
-   )
+export function Success() {
+    return (
+        <Result
+            status="success"
+            title= 'Check your email'
+            subTitle="We've sent an email to ... . Click the link in the email to reset your password
+            If you don't see the email, check other places it might be, like your junk, social, spam, or other folders."
+        />
+    )
 }

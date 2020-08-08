@@ -18,8 +18,6 @@ export const Forgot: React.FC = () => {
     const {handleSubmit, errors, control, reset} = useForm<InputEmailType>({resolver: yupResolver(schemaForgotPage)});
     const onSubmit = (data: InputEmailType) => {
         resetPassword(data.email);
-
-
     };
 
     const {errorMessage, isFetching, success} = useSelector((state: AppStateType) => state.forgotPage);

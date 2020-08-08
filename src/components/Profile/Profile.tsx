@@ -1,7 +1,16 @@
 import React from 'react';
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../redux/store";
+import { Redirect } from 'react-router-dom';
 
-type Props = {};
-export const Profile = (props: Props) => {
+export const Profile = () => {
+
+    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth)
+
+    if (!isAuth) {
+        return <Redirect to='/sign-in'/>
+    }
+
     return (
         <div>
             <div>

@@ -1,13 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import 'antd/dist/antd.css';
-import { Menu } from 'antd';
+import {Menu} from 'antd';
 import { NavLink } from "react-router-dom";
 
 export function HeaderMenu() {
+
     return (
         <Menu mode="horizontal">
             <Menu.Item key="profile">
-                <NavLink to='/profile'>Profile</NavLink>
+                <NavLink  to='/profile'>Profile</NavLink>
             </Menu.Item>
             <Menu.Item key="sign-in">
                 <NavLink to='/sign-in'>Sign-in</NavLink>

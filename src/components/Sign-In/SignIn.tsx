@@ -30,7 +30,7 @@ export const SignIn = () => {
     };
 
     //checking logged user or not
-    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
+    const isAuth = useSelector((state: AppStateType) => state.profile.isAuth);
     const {isFetching, errorMessage} = useSelector((state: AppStateType) => state.singInReducer);
 
 

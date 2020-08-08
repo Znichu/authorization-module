@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {AppStateType} from "../../redux/store";
 
 let mapStateToProps = (state: AppStateType) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.profile.isAuth
 });
 type PropsType = {
     isAuth: boolean
@@ -16,7 +16,7 @@ export const withRedirect = (Component: React.ComponentType) => {
         render() {
             if (!this.props.isAuth) return <Redirect to='/sign-in' />;
             return (
-                <Component {...this.props}/>
+                <Component />
             );
         }
     }

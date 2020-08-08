@@ -1,11 +1,35 @@
-import React from 'react';
-import {useSelector} from "react-redux";
+import React, {useCallback} from 'react';
+import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
+import {Avatar, Button} from "antd";
+import {createFromIconfontCN} from '@ant-design/icons';
+import {UserOutlined} from '@ant-design/icons';
+import {actions} from "../../redux/profile-reducer";
+import saveTokenInCookie from "../../utils/CookieToken/SaveTokenCookie"
 
 export const Profile = () => {
 
-    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth)
+    const IconFont = createFromIconfontCN({
+        scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
+    });
+
+    const dispatch = useDispatch();
+
+    const logoutProfile = useCallback(
+        () =>
+            dispatch(actions.logoutFromProfile(false)),
+        [dispatch]
+    )
+    const logout = () => {
+        logoutProfile();
+        saveTokenInCookie.remove('auth_token');
+    }
+
+    const {email, name, verified, publicCardPacksCount, avatar} = useSelector(
+        (state: AppStateType) => state.profile.profile
+    );
+    const isAuth = useSelector((state: AppStateType) => state.profile.isAuth);
 
     if (!isAuth) {
         return <Redirect to='/sign-in'/>
@@ -16,7 +40,30 @@ export const Profile = () => {
             <div>
                 <h3>Profile</h3>
             </div>
-            <button >Logout</button>
+            <div>
+                {avatar
+                    ? <img src={avatar || undefined} alt="profile avatar"/>
+                    : <Avatar size={64} style={{backgroundColor: '#87d068'}} icon={<UserOutlined/>}/>
+                }
+
+            </div>
+            <div>
+                <div>
+                    <h4>Name</h4>
+                    <span>{name}</span>
+                </div>
+                <div>
+                    <h4>Card Pack</h4>
+                    <span>{publicCardPacksCount}</span>
+                </div>
+                <div>
+                    <h4>Email</h4>
+                    <span>{email}</span>
+                </div>
+            </div>
+            <Button onClick={() => logout()} type="primary" icon={<IconFont type="icon-tuichu"/>}>
+                Logout
+            </Button>
         </div>
     );
 };

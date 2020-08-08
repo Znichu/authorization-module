@@ -13,8 +13,6 @@ type ResponseType = {
     name: string
     verified: string
     publicCardPacksCount: number
-    __v: number
-    password: string
     token: string
     success: boolean
 };
@@ -27,5 +25,5 @@ export const authAPI = {
     getAuth (token: string) {
         return instance.post(`auth/me`, {token})
             .then(res => res.data)
-    }
+    },
 };

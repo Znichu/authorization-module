@@ -2,7 +2,7 @@ import {authAPI} from '../api/signInApi';
 import {ThunkAction} from "redux-thunk";
 import {AppStateType, InferActionTypes} from "./store";
 import saveTokenInCookie from "../utils/CookieToken/SaveTokenCookie"
-import {getAuthData} from "./auth-reducer";
+import {getAuthData} from "./profile-reducer";
 
 type ThunkType = ThunkAction<void, AppStateType, {}, ActionType>
 type ActionType = InferActionTypes<typeof actions>

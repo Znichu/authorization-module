@@ -5,14 +5,16 @@ import saveTokenInCookie from '../utils/CookieToken/SaveTokenCookie'
 import {cardPack, cardPacksDataType, packsGetDataType} from "../utils/Types/PacksTypes/PacksTypes";
 
 const SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS';
+const IS_FETCHING = 'packsReducer/IS_FETCHING';
 
 
 const initialState = {
     cardPacks: [] as (Array<cardPack>),
     cardPacksTotalCount: null as (number | null),
-    page: null as (number | null),
-    pageCount: null as (number | null),
-    sortPacks: 0
+    page: 1,
+    pageCount: 10,
+    sortPacks: 0,
+    isFetching: false
 };
 
 export const packsReducer = (state: InitialStateType = initialState, action: ActionTypes) => {
@@ -24,6 +26,13 @@ export const packsReducer = (state: InitialStateType = initialState, action: Act
                 ...state,
                 ...action.payload,
                 cardPacks: [...action.payload.cardPacks]
+            }
+        }
+
+        case IS_FETCHING: {
+            return {
+                ...state,
+                isFetching: action.isFetching
             }
         }
 
@@ -40,17 +49,21 @@ const actions = {
         type: SET_CARD_PACKS,
         payload: {...cardPacksData}
     } as const),
+    isFetchingSuccess: (isFetching: boolean) => ({
+        type: IS_FETCHING,
+        isFetching
+    } as const),
 }
 
 //Thunks
 
-export const getPacksThunk = (packsGetData: packsGetDataType): ThunkType => async (dispatch) => {
+export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => async (dispatch) => {
 
     const {
         packName = null,
         min = null,
         max = null,
-        sortPacks = 0,
+        sortPacks = 1,
         page = 1,
         pageCount = 10,
         user_id = null
@@ -74,11 +87,12 @@ export const getPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
 
 
     try {
+        dispatch(actions.isFetchingSuccess(true));
         const cardPacksData = await packsAPI.getCardPacks(resultPacksQueryParams);
         const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData
         saveTokenInCookie.set('auth_token', token);
         dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
-
+        dispatch(actions.isFetchingSuccess(false));
     } catch (e) {
         console.log(e);
     }

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css';
 import {HeaderMenu} from "./components/Menu/Menu";
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import {Profile} from "./components/Profile/Profile";
 import {SignIn} from "./components/Sign-In/SignIn";
 import {Register} from "./components/Register/Register";
@@ -30,11 +30,12 @@ function App() {
         <div className='main'>
             <HeaderMenu/>
             <Switch>
-                <Route path='/profile' render={() => <Profile />}/>
-                <Route path='/sign-in' render={() => <SignIn/>}/>
-                <Route path='/register' render={() => <Register/>}/>
-                <Route path='/forgot' render={() => <Forgot/>}/>
-                <Route path='/set-new-password' render={() => <SetNewPass/>}/>
+                <Route path='/' exact render={() => <Redirect to='/profile'/>}/>
+                <Route path='/profile' exact render={() => <Profile />}/>
+                <Route path='/sign-in' exact render={() => <SignIn/>}/>
+                <Route path='/register' exact render={() => <Register/>}/>
+                <Route path='/forgot' exact render={() => <Forgot/>}/>
+                <Route path='/set-new-password' exact render={() => <SetNewPass/>}/>
             </Switch>
         </div>
     );

@@ -89,7 +89,7 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
     try {
         dispatch(actions.isFetchingSuccess(true));
         const cardPacksData = await packsAPI.getCardPacks(resultPacksQueryParams);
-        const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData
+        const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData;
         saveTokenInCookie.set('auth_token', token);
         dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
         dispatch(actions.isFetchingSuccess(false));

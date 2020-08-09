@@ -20,9 +20,21 @@ export const Packs = React.memo((props: any) => {
     }, []);
 
     const onChangeTableParams = (pagination: any, sorter: any, extra: any) => {
+
+        //We get object or array. We should found value of grade filter and return 0 or 1
+        const sortPacksDefine = () => {
+            if (extra.length === 2) {
+                const gradeParam = extra.filter((sorterParam: any) => sorterParam.field === 'grade');
+                return gradeParam[0].order;
+            } else {
+                return extra.field === 'grade' ? extra.order : null;
+            }
+        };
+
+        const sortPacks = sortPacksDefine() === 'ascend' ? 1 : 0;
         const page = pagination.current;
         const pageCount = pagination.pageSize;
-        dispatch(setPacksThunk({page, pageCount}))
+        dispatch(setPacksThunk({page, pageCount, sortPacks}));
     };
 
     const {cardPacks, cardPacksTotalCount, page, pageCount} = cardPacksData as cardPacksDataType;
@@ -47,6 +59,7 @@ export const Packs = React.memo((props: any) => {
             dataIndex: 'name',
             sorter: {
                 compare: (a: any, b: any) => a.name.localeCompare(b.name),
+                multiple: 1
             },
         },
         {
@@ -55,6 +68,7 @@ export const Packs = React.memo((props: any) => {
             dataIndex: 'grade',
             sorter: {
                 compare: (a: any, b: any) => a.grade - b.grade,
+                multiple: 2
             },
         },
         {

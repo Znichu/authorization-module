@@ -1,4 +1,4 @@
-export type cardPack = {
+export type cardPackType = {
     cardsCount: number | null;
     created: string | null;
     grade: number | null;
@@ -13,21 +13,32 @@ export type cardPack = {
     user_name: string | null;
     __v: number | null;
     _id: string | null;
-}
+};
+
+export type addCardPackType = {
+    name?: string;
+    path?: string;
+    grade?: number;
+    shots?: number;
+    rating?: number;
+    deckCover?: string;
+    private?: boolean;
+    type?: string;
+};
 
 export type cardPacksDataType = {
-    cardPacks: Array<cardPack>;
+    cardPacks: Array<cardPackType>;
     cardPacksTotalCount: number;
     page: number;
     pageCount: number;
-}
+};
 
 export type packsGetDataType = {
-    packName?: string | null,
-    min?: number | null,
-    max?: number | null,
+    packName?: string,
+    min?: number,
+    max?: number,
     sortPacks?: number,
-    page?: number | null,
-    pageCount?: number | null,
-    user_id?: number | null
-}
+    page?: number,
+    pageCount?: number,
+    user_id?: number
+};

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {setPacksThunk} from '../../redux/packs-reducer';
+import {addNewPackThunk, setPacksThunk, deleteCardPackThunk} from '../../redux/packs-reducer';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
 import {useEffect} from "react";
@@ -20,10 +20,9 @@ export const Packs = React.memo((props: any) => {
     }, []);
 
     const onChangeTableParams = (pagination: any, sorter: any, extra: any) => {
-
         //We get object or array. We should found value of grade filter and return 0 or 1
         const sortPacksDefine = () => {
-            if (extra.length === 2) {
+            if (extra.length >= 2) {
                 const gradeParam = extra.filter((sorterParam: any) => sorterParam.field === 'grade');
                 return gradeParam[0].order;
             } else {
@@ -37,6 +36,15 @@ export const Packs = React.memo((props: any) => {
         dispatch(setPacksThunk({page, pageCount, sortPacks}));
     };
 
+    const addNewCardPack = () => {
+        dispatch(addNewPackThunk({}));
+    }
+
+    const deleteCardPack = (e: any) => {
+        const userId = e.currentTarget.closest('tr').getAttribute('data-row-key');
+        dispatch(deleteCardPackThunk(userId));
+    }
+
     const {cardPacks, cardPacksTotalCount, page, pageCount} = cardPacksData as cardPacksDataType;
     const pagination: any = {
         current: page,
@@ -46,7 +54,7 @@ export const Packs = React.memo((props: any) => {
     };
 
     const dataSource = cardPacks.map((cardPack, index) => ({
-        key: index,
+        key: cardPack._id,
         name: cardPack.name,
         grade: cardPack.grade,
     }));
@@ -73,10 +81,10 @@ export const Packs = React.memo((props: any) => {
         },
         {
             key: 'add',
-            title: <button>Add</button>,
+            title: <button onClick={addNewCardPack}>Add</button>,
             render: () => (
                 <Space size='middle' className={s.addColumnParams}>
-                    <button>delete</button>
+                    <button onClick={deleteCardPack}>delete</button>
                     <button>update</button>
                     <NavLink to={''}>Cards</NavLink>
                     <NavLink to={''}>Learn</NavLink>

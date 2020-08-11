@@ -2,20 +2,22 @@ import {ThunkAction} from "redux-thunk";
 import {AppStateType, InferActionTypes} from "./store";
 import {packsAPI} from "../api/packsApi";
 import saveTokenInCookie from '../utils/CookieToken/SaveTokenCookie'
-import {cardPack, cardPacksDataType, packsGetDataType} from "../utils/Types/PacksTypes/PacksTypes";
+import {cardPackType, cardPacksDataType, packsGetDataType, addCardPackType} from "../utils/Types/PacksTypes/PacksTypes";
 
 const SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS';
 const IS_FETCHING = 'packsReducer/IS_FETCHING';
 
 
 const initialState = {
-    cardPacks: [] as (Array<cardPack>),
+    cardPacks: [] as (Array<cardPackType>),
     cardPacksTotalCount: null as (number | null),
     page: 1,
     pageCount: 10,
     sortPacks: 0,
     isFetching: false
 };
+
+//Reducers
 
 export const packsReducer = (state: InitialStateType = initialState, action: ActionTypes) => {
 
@@ -70,7 +72,7 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
     } = packsGetData;
 
 
-    const token = saveTokenInCookie.get('auth_token') || null;
+    const token = saveTokenInCookie.get('auth_token');
 
     const packsQueryParamsArr = ['?'];
 
@@ -85,19 +87,53 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
 
     const resultPacksQueryParams = packsQueryParamsArr.join('&').replace(/\?&/, '?');
 
-
     try {
         dispatch(actions.isFetchingSuccess(true));
         const cardPacksData = await packsAPI.getCardPacks(resultPacksQueryParams);
         const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData;
         saveTokenInCookie.set('auth_token', token);
-        dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
+        await dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
         dispatch(actions.isFetchingSuccess(false));
     } catch (e) {
         console.log(e);
     }
 
 };
+
+export const addNewPackThunk = (newCardPackData: addCardPackType): ThunkType => async (dispatch) => {
+
+    const token = saveTokenInCookie.get('auth_token');
+
+    try {
+        dispatch(actions.isFetchingSuccess(true));
+
+        const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
+
+        saveTokenInCookie.set('auth_token', createdCardPackData.token);
+        await dispatch(setPacksThunk({}));
+        dispatch(actions.isFetchingSuccess(false));
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const deleteCardPackThunk = (userId: string): ThunkType => async (dispatch) => {
+
+    const token = saveTokenInCookie.get('auth_token');
+
+    try {
+        dispatch(actions.isFetchingSuccess(true));
+
+        const deletedCardPackData = await packsAPI.deleteCardPack(userId, token);
+
+        saveTokenInCookie.set('auth_token', deletedCardPackData.token);
+        await dispatch(setPacksThunk({}));
+        dispatch(actions.isFetchingSuccess(false));
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 //Types
 type InitialStateType = typeof initialState

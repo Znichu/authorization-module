@@ -11,9 +11,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {getInitializeApp} from "./redux/app-reducer";
 import {AppStateType} from "./redux/store";
 import {Preloader} from "./components/Preloader/Preloader";
+import AuthenticationRoute from "./utils/AuthenticationRoute";
 
 
-function App() {
+function App () {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -31,7 +32,7 @@ function App() {
             <HeaderMenu/>
             <Switch>
                 <Route path='/' exact render={() => <Redirect to='/profile'/>}/>
-                <Route path='/profile' exact render={() => <Profile />}/>
+                <AuthenticationRoute path='/profile' exact={true} Component={ Profile } />
                 <Route path='/sign-in' exact render={() => <SignIn/>}/>
                 <Route path='/register' exact render={() => <Register/>}/>
                 <Route path='/forgot' exact render={() => <Forgot/>}/>

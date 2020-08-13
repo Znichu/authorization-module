@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
-import {Redirect} from 'react-router-dom';
 import {Avatar, Button} from "antd";
 import {createFromIconfontCN} from '@ant-design/icons';
 import {UserOutlined} from '@ant-design/icons';
@@ -26,14 +25,7 @@ export const Profile = () => {
         saveTokenInCookie.remove('auth_token');
     }
 
-    const {email, name, verified, publicCardPacksCount, avatar} = useSelector(
-        (state: AppStateType) => state.profile.profile
-    );
-    const isAuth = useSelector((state: AppStateType) => state.profile.isAuth);
-
-    if (!isAuth) {
-        return <Redirect to='/sign-in'/>
-    }
+    const {email, name, verified, publicCardPacksCount, avatar} = useSelector((state: AppStateType) => state.profile.profile);
 
     return (
         <div>
@@ -45,7 +37,6 @@ export const Profile = () => {
                     ? <img src={avatar || undefined} alt="profile avatar"/>
                     : <Avatar size={64} style={{backgroundColor: '#87d068'}} icon={<UserOutlined/>}/>
                 }
-
             </div>
             <div>
                 <div>

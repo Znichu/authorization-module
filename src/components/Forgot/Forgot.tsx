@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
 import {changePassword} from "../../redux/forgot-reducer";
 import {schemaForgotPage} from '../../utils/validators/validators';
-import {Success} from '../Success/Success';
+import {Success} from '../SuccessPage/Success';
 
 type InputEmailType = {
     email: string

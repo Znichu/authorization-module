@@ -2,24 +2,45 @@ import * as React from 'react';
 import {addNewPackThunk, setPacksThunk, deleteCardPackThunk} from '../../redux/packs-reducer';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
-import {useEffect} from "react";
-import {Space, Table} from 'antd';
+import {useCallback, useEffect} from "react";
+import {Button, Space, Table} from 'antd';
 import s from './Packs.module.scss'
-import {NavLink} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
 import {cardPacksDataType} from "../../utils/Types/PacksTypes/PacksTypes";
 
 
-export const Packs = React.memo((props: any) => {
+export const Packs: React.FC = React.memo((props: any) => {
 
     const dispatch = useDispatch();
     const cardPacksData = useSelector((state: AppStateType) => state.packs);
+    const authUserId = useSelector((state: AppStateType) => state.singInReducer._id);
     const isFetching = useSelector((state: AppStateType) => state.packs.isFetching);
+    const errorMessage = useSelector((state: AppStateType) => state.packs.errorMessage);
+
+    const test = () => {
+        let deleteCardPackButtons = document.getElementsByClassName('deleteCardPack');
+        let updateCardPackButtons = document.getElementsByClassName('updateCardPack');
+        for (let i = 0; i < deleteCardPackButtons.length; i++) {
+            let trParentTag: any = deleteCardPackButtons[i].closest('tr');
+            let userId = trParentTag.getAttribute('data-row-key').split('&')[0];
+
+            if (authUserId !== userId) {
+                deleteCardPackButtons[i].setAttribute("disabled", "disabled");
+                updateCardPackButtons[i].setAttribute("disabled", "disabled");
+            }
+        }};
+
 
     useEffect(() => {
-        dispatch(setPacksThunk({}))
+        
+        dispatch(setPacksThunk({}));
+
+        test();
+
     }, []);
 
-    const onChangeTableParams = (pagination: any, sorter: any, extra: any) => {
+
+    const onChangeTableParams = useCallback((pagination: any, sorter: any, extra: any) => {
         //We get object or array. We should found value of grade filter and return 0 or 1
         const sortPacksDefine = () => {
             if (extra.length >= 2) {
@@ -30,19 +51,20 @@ export const Packs = React.memo((props: any) => {
             }
         };
 
-        const sortPacks = sortPacksDefine() === 'ascend' ? 1 : 0;
+        const sortPacks = sortPacksDefine() ? (sortPacksDefine() === 'ascend' ? 1 : 0) : 1;
+
         const page = pagination.current;
         const pageCount = pagination.pageSize;
         dispatch(setPacksThunk({page, pageCount, sortPacks}));
-    };
+    }, [dispatch]);
 
     const addNewCardPack = () => {
         dispatch(addNewPackThunk({}));
     }
 
     const deleteCardPack = (e: any) => {
-        const userId = e.currentTarget.closest('tr').getAttribute('data-row-key');
-        dispatch(deleteCardPackThunk(userId));
+        const packId = e.currentTarget.closest('tr').getAttribute('data-row-key').split('&')[1];
+        dispatch(deleteCardPackThunk(packId));
     }
 
     const {cardPacks, cardPacksTotalCount, page, pageCount} = cardPacksData as cardPacksDataType;
@@ -53,12 +75,11 @@ export const Packs = React.memo((props: any) => {
         position: ["bottomCenter"]
     };
 
-    const dataSource = cardPacks.map((cardPack, index) => ({
-        key: cardPack._id,
+    const dataSource = cardPacks.map((cardPack) => ({
+        key: `${cardPack.user_id}&${cardPack._id}`,
         name: cardPack.name,
         grade: cardPack.grade,
     }));
-
 
     const columns: any = [
         {
@@ -84,8 +105,14 @@ export const Packs = React.memo((props: any) => {
             title: <button onClick={addNewCardPack}>Add</button>,
             render: () => (
                 <Space size='middle' className={s.addColumnParams}>
-                    <button onClick={deleteCardPack}>delete</button>
-                    <button>update</button>
+                    <Button type="primary"
+                            danger
+                            onClick={deleteCardPack}
+                            className={'deleteCardPack'}
+                    >delete</Button>
+                    <Button type="primary"
+                            className={'updateCardPack'}
+                    >update</Button>
                     <NavLink to={''}>Cards</NavLink>
                     <NavLink to={''}>Learn</NavLink>
                 </Space>
@@ -94,14 +121,16 @@ export const Packs = React.memo((props: any) => {
     ];
 
     return (
-        <div className="">
-            <Table dataSource={dataSource}
-                   columns={columns}
-                   pagination={pagination}
-                   loading={isFetching}
-                   onChange={onChangeTableParams}
-            />
-        </div>
+        <>
+            {errorMessage ? <Redirect to={'/sign-in'}/> :
+                <div className="">
+                    <Table dataSource={dataSource}
+                           columns={columns}
+                           pagination={pagination}
+                           loading={isFetching}
+                           onChange={onChangeTableParams}
+                    />
+                </div>}
+        </>
     )
-
 });

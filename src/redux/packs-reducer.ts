@@ -6,6 +6,7 @@ import {cardPackType, cardPacksDataType, packsGetDataType, addCardPackType} from
 
 const SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS';
 const IS_FETCHING = 'packsReducer/IS_FETCHING';
+const SET_CARD_PACKS_ERROR = 'packsReducer/SET_CARD_PACKS_ERROR';
 
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
     page: 1,
     pageCount: 10,
     sortPacks: 0,
-    isFetching: false
+    isFetching: false,
+    errorMessage: "",
 };
 
 //Reducers
@@ -28,6 +30,13 @@ export const packsReducer = (state: InitialStateType = initialState, action: Act
                 ...state,
                 ...action.payload,
                 cardPacks: [...action.payload.cardPacks]
+            }
+        }
+
+        case SET_CARD_PACKS_ERROR: {
+            return {
+                ...state,
+                errorMessage: action.errorMessage
             }
         }
 
@@ -51,6 +60,10 @@ const actions = {
         type: SET_CARD_PACKS,
         payload: {...cardPacksData}
     } as const),
+    setCardPacksSuccessError: (errorMessage: string) => ({
+        type: SET_CARD_PACKS_ERROR,
+        errorMessage
+    } as const),
     isFetchingSuccess: (isFetching: boolean) => ({
         type: IS_FETCHING,
         isFetching
@@ -72,7 +85,7 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
     } = packsGetData;
 
 
-    const token = saveTokenInCookie.get('auth_token');
+    const token = await saveTokenInCookie.get('auth_token');
 
     const packsQueryParamsArr = ['?'];
 
@@ -87,51 +100,53 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
 
     const resultPacksQueryParams = packsQueryParamsArr.join('&').replace(/\?&/, '?');
 
+    await dispatch(actions.isFetchingSuccess(true));
     try {
-        dispatch(actions.isFetchingSuccess(true));
         const cardPacksData = await packsAPI.getCardPacks(resultPacksQueryParams);
         const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData;
-        saveTokenInCookie.set('auth_token', token);
+        await saveTokenInCookie.set('auth_token', token);
         await dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
-        dispatch(actions.isFetchingSuccess(false));
+        await dispatch(actions.setCardPacksSuccessError(''));
     } catch (e) {
-        console.log(e);
+        console.log(e.response);
+        await dispatch(actions.setCardPacksSuccessError(e.response.data.error));
     }
+    await dispatch(actions.isFetchingSuccess(false));
 
 };
 
 export const addNewPackThunk = (newCardPackData: addCardPackType): ThunkType => async (dispatch) => {
 
-    const token = saveTokenInCookie.get('auth_token');
+    const token = await saveTokenInCookie.get('auth_token');
 
+    await dispatch(actions.isFetchingSuccess(true));
     try {
-        dispatch(actions.isFetchingSuccess(true));
 
         const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
 
-        saveTokenInCookie.set('auth_token', createdCardPackData.token);
+        await saveTokenInCookie.set('auth_token', createdCardPackData.token);
         await dispatch(setPacksThunk({}));
-        dispatch(actions.isFetchingSuccess(false));
     } catch (e) {
-        console.log(e);
+        console.log(e.response);
     }
+    await dispatch(actions.isFetchingSuccess(false));
+
 }
 
 export const deleteCardPackThunk = (userId: string): ThunkType => async (dispatch) => {
 
-    const token = saveTokenInCookie.get('auth_token');
+    const token = await saveTokenInCookie.get('auth_token');
 
+    await dispatch(actions.isFetchingSuccess(true));
     try {
-        dispatch(actions.isFetchingSuccess(true));
-
         const deletedCardPackData = await packsAPI.deleteCardPack(userId, token);
 
-        saveTokenInCookie.set('auth_token', deletedCardPackData.token);
+        await saveTokenInCookie.set('auth_token', deletedCardPackData.token);
         await dispatch(setPacksThunk({}));
-        dispatch(actions.isFetchingSuccess(false));
     } catch (e) {
-        console.log(e);
+        console.log(e.response);
     }
+    await dispatch(actions.isFetchingSuccess(false));
 }
 
 

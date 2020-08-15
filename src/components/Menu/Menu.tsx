@@ -19,6 +19,9 @@ export function HeaderMenu() {
             <Menu.Item key="set-new-pass">
                 <NavLink to='/cards'>Cards</NavLink>
             </Menu.Item>
+            <Menu.Item key="editor">
+                <NavLink to='/editor'>Editor</NavLink>
+            </Menu.Item>
         </Menu>
     )
 }

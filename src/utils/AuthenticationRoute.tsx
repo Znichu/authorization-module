@@ -1,22 +1,22 @@
 import React from "react"
 import {useSelector} from "react-redux";
 import {AppStateType} from "../redux/store";
-import {Route, Redirect} from "react-router-dom";
+import {Route, Redirect, RouteComponentProps} from "react-router-dom";
 
 type Props = {
     path: string
-    Component: React.FC
+    Component: React.FC<RouteComponentProps>
     exact?: boolean
 }
 
-const AuthenticationRoute: React.FC<Props> = ({Component, path, exact, ...rest}) => {
+const AuthenticationRoute: React.FC<Props> = ({Component, path, exact}) => {
     const isAuth = useSelector((state: AppStateType) => state.profile.isAuth);
     return (
         <Route
             path={path}
             exact={exact}
-            render={() =>
-                isAuth ? <Component { ...rest } /> : <Redirect to={'/sign-in'}/>
+            render={(props: RouteComponentProps) =>
+                isAuth ? <Component { ...props } /> : <Redirect to={'/sign-in'}/>
             }
         />
     )

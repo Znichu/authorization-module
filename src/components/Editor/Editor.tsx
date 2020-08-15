@@ -26,7 +26,8 @@ export const Editor = () => {
         link.download = fileName;
         link.click();
         //удаляет внутреннюю ссылку на объект
-        URL.revokeObjectURL(link.href)
+        URL.revokeObjectURL(link.href);
+        setValue('');
     }
 
     return (
@@ -38,7 +39,10 @@ export const Editor = () => {
                     onChange={onChange}
                 />
                 <div className={style.btnGroup}>
-                    <Button onClick={() => saveTextFile('Text.txt', value + `\r\n`)} type="primary" icon={<SaveOutlined />} >Save</Button>
+                    <Button onClick={() => saveTextFile('Text.txt', value )}
+                            type="primary" icon={<SaveOutlined />}>
+                        Save
+                    </Button>
                     <Button type="primary" icon={<CloudUploadOutlined />} >Send</Button>
                     <Button type="primary" icon={<CloudDownloadOutlined />} >Download</Button>
                 </div>

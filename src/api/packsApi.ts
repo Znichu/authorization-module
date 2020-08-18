@@ -29,8 +29,8 @@ export const packsAPI = {
         return instance.get<getCardPacksResponseType>(`cards/pack${getPacksQueryParams}`)
             .then(res => res.data)
     },
-    addCardPack: (cardsPack: any, token: string) => {
-        return instance.post<CardPackResponseType>(`cards/pack`, {cardsPack: {...cardsPack}, token: token})
+    addCardPack: (cardPack: any, token: string) => {
+        return instance.post<CardPackResponseType>(`cards/pack`, {cardsPack: {...cardPack}, token: token})
             .then(res => res.data)
     },
     deleteCardPack: (userId: string, token: string) => {

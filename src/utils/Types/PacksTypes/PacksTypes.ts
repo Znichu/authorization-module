@@ -42,3 +42,12 @@ export type packsGetDataType = {
     pageCount?: number,
     user_id?: number
 };
+
+
+export type recordType = {
+    key: string;
+    name: string;
+    grade: string;
+    userId: string;
+    cardPackId: string;
+}

@@ -121,7 +121,6 @@ export const addNewPackThunk = (newCardPackData: addCardPackType): ThunkType => 
 
     await dispatch(actions.isFetchingSuccess(true));
     try {
-
         const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
 
         await saveTokenInCookie.set('auth_token', createdCardPackData.token);

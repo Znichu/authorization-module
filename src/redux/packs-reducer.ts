@@ -14,7 +14,7 @@ const initialState = {
     cardPacksTotalCount: null as (number | null),
     page: 1,
     pageCount: 10,
-    sortPacks: 0,
+    sortPacks: 1,
     isFetching: false,
     errorMessage: "",
 };
@@ -105,7 +105,7 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
         const cardPacksData = await packsAPI.getCardPacks(resultPacksQueryParams);
         const {cardPacks, cardPacksTotalCount, page, pageCount, token} = cardPacksData;
         await saveTokenInCookie.set('auth_token', token);
-        await dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount}));
+        await dispatch(actions.setCardPacksSuccess({cardPacks, cardPacksTotalCount, page, pageCount, sortPacks}));
         await dispatch(actions.setCardPacksSuccessError(''));
     } catch (e) {
         console.log(e.response);
@@ -115,7 +115,7 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
 
 };
 
-export const addNewPackThunk = (newCardPackData: addCardPackType): ThunkType => async (dispatch) => {
+export const addNewPackThunk = (packsGetData: packsGetDataType, newCardPackData: addCardPackType): ThunkType => async (dispatch) => {
 
     const token = await saveTokenInCookie.get('auth_token');
 
@@ -124,7 +124,7 @@ export const addNewPackThunk = (newCardPackData: addCardPackType): ThunkType => 
         const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
 
         await saveTokenInCookie.set('auth_token', createdCardPackData.token);
-        await dispatch(setPacksThunk({}));
+        await dispatch(setPacksThunk(packsGetData));
     } catch (e) {
         console.log(e.response);
     }
@@ -132,7 +132,7 @@ export const addNewPackThunk = (newCardPackData: addCardPackType): ThunkType => 
 
 }
 
-export const deleteCardPackThunk = (userId: string): ThunkType => async (dispatch) => {
+export const deleteCardPackThunk = (packsGetData: packsGetDataType, userId: string): ThunkType => async (dispatch) => {
 
     const token = await saveTokenInCookie.get('auth_token');
 
@@ -141,7 +141,7 @@ export const deleteCardPackThunk = (userId: string): ThunkType => async (dispatc
         const deletedCardPackData = await packsAPI.deleteCardPack(userId, token);
 
         await saveTokenInCookie.set('auth_token', deletedCardPackData.token);
-        await dispatch(setPacksThunk({}));
+        await dispatch(setPacksThunk(packsGetData));
     } catch (e) {
         console.log(e.response);
     }

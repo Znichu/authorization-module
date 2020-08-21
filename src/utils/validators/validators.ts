@@ -27,10 +27,10 @@ export const schemaSetNewPassForm = yup.object().shape({
 });
 
 export const schemaAddNewCardPackForm = yup.object().shape({
-    name: yup.string().min(2, `Require more or 2 letter`).max(50, `Require less or 50 letters`),
-    path:  yup.string().min(2, `Require more or 2 symbols`),
+    name: yup.string().max(50, `Require less or 50 letters`),
+    path:  yup.string(),
     shots:  yup.number().min(0, `Require more or equal 0`),
     rating:  yup.number().min(0,  `Require more or equal 0`),
-    deckCover:  yup.string().min(4,  `Require more or 4 letters`),
-    type:  yup.string().min(2, `Require more or 2 letters`),
+    deckCover:  yup.string(),
+    type:  yup.string(),
 });

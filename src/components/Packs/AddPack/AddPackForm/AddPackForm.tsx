@@ -11,11 +11,15 @@ import {addNewPackThunk} from "../../../../redux/packs-reducer";
 
 export const AddPackForm = memo((props: any) => {
 
+    const page = props.pagination.current;
+    const pageCount = props.pagination.pageSize;
+    const sortPacks = props.sortPacks;
+
     const dispatch = useDispatch();
 
     const addNewCardPackCallback = useCallback((newCardPackData) => {
-        dispatch(addNewPackThunk(newCardPackData));
-    }, [dispatch]);
+        dispatch(addNewPackThunk({page, pageCount, sortPacks}, newCardPackData));
+    }, [dispatch, page, pageCount, sortPacks]);
 
     const {handleSubmit, errors, control} = useForm<any>({
         resolver: yupResolver(schemaAddNewCardPackForm)
@@ -34,8 +38,7 @@ export const AddPackForm = memo((props: any) => {
                             control={control}
                             placeholder="default = no Name"
                 />
-                {errors.name && <Alert closable={true}
-                                       type={"warning"}
+                {errors.name && <Alert type={"warning"}
                                        message={errors.name.message}
                                        className={s.errAlert}/>}
 
@@ -44,8 +47,7 @@ export const AddPackForm = memo((props: any) => {
                             control={control}
                             placeholder="default = /def"
                 />
-                {errors.path && <Alert closable={true}
-                                       type={"warning"}
+                {errors.path && <Alert type={"warning"}
                                        message={errors.path.message}
                                        className={s.errAlert}/>}
 
@@ -69,8 +71,7 @@ export const AddPackForm = memo((props: any) => {
                                 );
                             }}
                 />
-                {errors.grade && <Alert closable={true}
-                                        type={"warning"}
+                {errors.grade && <Alert type={"warning"}
                                         message={errors.grade.message}
                                         className={s.errAlert}/>}
 
@@ -79,8 +80,7 @@ export const AddPackForm = memo((props: any) => {
                             control={control}
                             placeholder="default = 0"
                 />
-                {errors.shots && <Alert closable={true}
-                                        type={"warning"}
+                {errors.shots && <Alert type={"warning"}
                                         message={errors.shots.message}
                                         className={s.errAlert}/>}
 
@@ -89,8 +89,7 @@ export const AddPackForm = memo((props: any) => {
                             control={control}
                             placeholder="default = url or base64"
                 />
-                {errors.deckCover && <Alert closable={true}
-                                            type={"warning"}
+                {errors.deckCover && <Alert type={"warning"}
                                             message={errors.deckCover.message}
                                             className={s.errAlert}/>}
 
@@ -98,7 +97,8 @@ export const AddPackForm = memo((props: any) => {
                             control={control}
                             render={(props): any => (
                                 <Checkbox onChange={e => props.onChange(e.target.checked)}
-                                          checked={props.value} className={s.packParam}>Private</Checkbox>
+                                          checked={props.value}
+                                          className={s.packParam}>Private</Checkbox>
                             )}
                 />
 
@@ -107,8 +107,7 @@ export const AddPackForm = memo((props: any) => {
                             control={control}
                             placeholder="default = pack"
                 />
-                {errors.type && <Alert closable={true}
-                                       type={"warning"}
+                {errors.type && <Alert type={"warning"}
                                        message={errors.type.message}
                                        className={s.errAlert}/>}
 

@@ -3,7 +3,7 @@ import {Button, Modal} from "antd";
 import {memo, useState} from "react";
 import {AddPackForm} from "./AddPackForm/AddPackForm";
 
-export const AddPack: React.FC = memo((props) => {
+export const AddPack = memo((props: any) => {
 
     const [visibleModal, setVisibleModal] = useState(false);
     const modalShowHide = () => setVisibleModal(!visibleModal);
@@ -16,7 +16,7 @@ export const AddPack: React.FC = memo((props) => {
                    onCancel={modalShowHide}
                    footer={false}
             >
-                <AddPackForm onCancel={modalShowHide}/>
+                <AddPackForm {...props}/>
             </Modal>
         </>
     )

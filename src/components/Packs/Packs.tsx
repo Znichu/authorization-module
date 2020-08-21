@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {addNewPackThunk, setPacksThunk, deleteCardPackThunk} from '../../redux/packs-reducer';
+import {setPacksThunk, deleteCardPackThunk} from '../../redux/packs-reducer';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
 import {memo, useCallback, useEffect} from "react";
@@ -15,6 +15,7 @@ export const Packs: React.FC = memo((props) => {
     const dispatch = useDispatch();
     const cardPacksData = useSelector((state: AppStateType) => state.packs);
     const authUserId = useSelector((state: AppStateType) => state.singInReducer._id);
+    const sortPacks = useSelector((state: AppStateType) => state.packs.sortPacks);
     const isFetching = useSelector((state: AppStateType) => state.packs.isFetching);
     const errorMessage = useSelector((state: AppStateType) => state.packs.errorMessage);
 
@@ -36,12 +37,13 @@ export const Packs: React.FC = memo((props) => {
         const sortPacks = sortPacksDefine() ? (sortPacksDefine() === 'ascend' ? 1 : 0) : 1;
         const page = pagination.current;
         const pageCount = pagination.pageSize;
-
         dispatch(setPacksThunk({page, pageCount, sortPacks}));
     }, [dispatch]);
 
-    const deleteCardPack = useCallback((packId: string) => {
-        dispatch(deleteCardPackThunk(packId));
+    const deleteCardPack = useCallback((pagination, sortPacks, cardPackId) => {
+        const page = pagination.current;
+        const pageCount = pagination.pageSize;
+        dispatch(deleteCardPackThunk({page, pageCount, sortPacks}, cardPackId));
     }, [dispatch]);
 
     const {cardPacks, cardPacksTotalCount, page, pageCount} = cardPacksData as cardPacksDataType;
@@ -82,12 +84,12 @@ export const Packs: React.FC = memo((props) => {
         },
         {
             key: 'add',
-            title: <AddPack />,
+            title: <AddPack sortPacks={sortPacks} pagination={pagination}/>,
             render: (record: recordType) => (
                 <Space size='middle' className={s.cardPackColumnParams}>
                     <Button type="primary"
                             danger
-                            onClick={() => deleteCardPack(record.cardPackId)}
+                            onClick={() => deleteCardPack(pagination, sortPacks, record.cardPackId)}
                             disabled={authUserId !== record.userId}>delete</Button>
                     <Button type="primary"
                             disabled={authUserId !== record.userId}>update</Button>

@@ -31,6 +31,7 @@ export type cardPacksDataType = {
     cardPacksTotalCount: number;
     page: number;
     pageCount: number;
+    sortPacks: number;
 };
 
 export type packsGetDataType = {

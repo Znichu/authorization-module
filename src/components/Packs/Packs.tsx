@@ -6,18 +6,29 @@ import {memo, useCallback, useEffect} from "react";
 import {Button, Space, Table} from 'antd';
 import s from './Packs.module.scss'
 import {NavLink, Redirect} from "react-router-dom";
-import {cardPacksDataType, recordType} from "../../utils/Types/PacksTypes/PacksTypes";
-import {AddPack} from "./AddPack/AddPack";
+import {cardPackType, recordType} from "../../utils/Types/PacksTypes/PacksTypes";
+import {AddUpdateFormModal} from '../../utils/Modals/AddUpdateFormModal/AddUpdateFormModal';
+import {AddUpdateForm} from "../../utils/Modals/AddUpdateFormModal/AddUpdateForm/AddUpdateForm";
 
 
 export const Packs: React.FC = memo((props) => {
 
     const dispatch = useDispatch();
-    const cardPacksData = useSelector((state: AppStateType) => state.packs);
-    const authUserId = useSelector((state: AppStateType) => state.singInReducer._id);
-    const sortPacks = useSelector((state: AppStateType) => state.packs.sortPacks);
-    const isFetching = useSelector((state: AppStateType) => state.packs.isFetching);
-    const errorMessage = useSelector((state: AppStateType) => state.packs.errorMessage);
+
+    const {
+        packs: cardPacksData,
+        singInReducer: {_id: authUserId}
+    } = useSelector((state: AppStateType) => state);
+
+
+    const {cardPacks, cardPacksTotalCount, page, pageCount, sortPacks, isFetching} = cardPacksData;
+
+    const pagination: any = {
+        current: page,
+        pageSize: pageCount,
+        total: cardPacksTotalCount,
+        position: ["bottomCenter"]
+    };
 
     useEffect(() => {
         dispatch(setPacksThunk({}));
@@ -28,34 +39,24 @@ export const Packs: React.FC = memo((props) => {
         const sortPacksDefine = () => {
             if (extra.length >= 2) {
                 const gradeParam = extra.filter((sorterParam: any) => sorterParam.field === 'grade');
-                return gradeParam[0].order;
+                return gradeParam[0].order = gradeParam;
             } else {
                 return extra.field === 'grade' ? extra.order : null;
             }
         };
-
         const sortPacks = sortPacksDefine() ? (sortPacksDefine() === 'ascend' ? 1 : 0) : 1;
-        const page = pagination.current;
-        const pageCount = pagination.pageSize;
+        const {current: page, pageSize: pageCount} = pagination;
         dispatch(setPacksThunk({page, pageCount, sortPacks}));
     }, [dispatch]);
 
+
     const deleteCardPack = useCallback((pagination, sortPacks, cardPackId) => {
-        const page = pagination.current;
-        const pageCount = pagination.pageSize;
+        const {current: page, pageSize: pageCount} = pagination;
         dispatch(deleteCardPackThunk({page, pageCount, sortPacks}, cardPackId));
     }, [dispatch]);
 
-    const {cardPacks, cardPacksTotalCount, page, pageCount} = cardPacksData as cardPacksDataType;
 
-    const pagination: any = {
-        current: page,
-        pageSize: pageCount,
-        total: cardPacksTotalCount,
-        position: ["bottomCenter"]
-    };
-
-    const dataSource = cardPacks.map((cardPack, index) => ({
+    const dataSource = cardPacks.map((cardPack: cardPackType, index: number) => ({
         key: `${cardPack._id}_${index}`,
         name: cardPack.name,
         grade: cardPack.grade,
@@ -84,15 +85,34 @@ export const Packs: React.FC = memo((props) => {
         },
         {
             key: 'add',
-            title: <AddPack sortPacks={sortPacks} pagination={pagination}/>,
+            title:
+                <AddUpdateFormModal modalTitle='Create a new cards pack'
+                                    button={{
+                                        name: 'Add',
+                                        params: {type: "primary", ghost: true}
+                                    }}>
+                    <AddUpdateForm sortPacks={sortPacks}
+                                   pagination={pagination}
+                                   actionName='Create'/>
+                </AddUpdateFormModal>,
             render: (record: recordType) => (
                 <Space size='middle' className={s.cardPackColumnParams}>
                     <Button type="primary"
                             danger
                             onClick={() => deleteCardPack(pagination, sortPacks, record.cardPackId)}
                             disabled={authUserId !== record.userId}>delete</Button>
-                    <Button type="primary"
-                            disabled={authUserId !== record.userId}>update</Button>
+                    <AddUpdateFormModal modalTitle='Update a cards pack'
+                                        button={{
+                                            name: 'update',
+                                            params: {type: "primary", disabled: authUserId !== record.userId}
+                                        }}>
+                        <AddUpdateForm sortPacks={sortPacks}
+                                       pagination={pagination}
+                                       actionName='Update'
+                                       cardPackData={
+                                           cardPacks.filter(cardPack => cardPack._id === record.cardPackId)[0]
+                                       }/>
+                    </AddUpdateFormModal>
                     <NavLink to={''}>Cards</NavLink>
                     <NavLink to={''}>Learn</NavLink>
                 </Space>

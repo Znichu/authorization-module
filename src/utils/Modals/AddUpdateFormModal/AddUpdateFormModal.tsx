@@ -1,22 +1,23 @@
 import * as React from 'react';
 import {Button, Modal} from "antd";
 import {memo, useState} from "react";
-import {AddPackForm} from "./AddPackForm/AddPackForm";
 
-export const AddPack = memo((props: any) => {
+export const AddUpdateFormModal = memo((props: any) => {
+
+    const {modalTitle, button} = props;
 
     const [visibleModal, setVisibleModal] = useState(false);
     const modalShowHide = () => setVisibleModal(!visibleModal);
 
     return (
         <>
-            <Button type="primary" ghost onClick={modalShowHide}>Add</Button>
+            <Button {...button.params} onClick={modalShowHide}>{button.name}</Button>
             <Modal visible={visibleModal}
-                   title="Create a new card pack"
+                   title={modalTitle}
                    onCancel={modalShowHide}
                    footer={false}
             >
-                <AddPackForm {...props}/>
+                {props.children}
             </Modal>
         </>
     )

@@ -24,6 +24,7 @@ export type addCardPackType = {
     deckCover?: string;
     private?: boolean;
     type?: string;
+    _id?: string
 };
 
 export type cardPacksDataType = {

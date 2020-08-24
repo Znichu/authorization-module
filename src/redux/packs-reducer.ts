@@ -115,15 +115,26 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
 
 };
 
-export const addNewPackThunk = (packsGetData: packsGetDataType, newCardPackData: addCardPackType): ThunkType => async (dispatch) => {
+export const addUpdatePackThunk = (packsGetData: packsGetDataType,
+                                   newCardPackData: addCardPackType,
+                                   cardPackId: string | null,
+                                   actionName: string): ThunkType => async (dispatch) => {
 
     const token = await saveTokenInCookie.get('auth_token');
 
     await dispatch(actions.isFetchingSuccess(true));
     try {
-        const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
+        if (actionName === 'Create') {
+            const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
+            await saveTokenInCookie.set('auth_token', createdCardPackData.token);
 
-        await saveTokenInCookie.set('auth_token', createdCardPackData.token);
+        } else if (actionName === 'Update') {
+            const createdCardPackData = await packsAPI.updateCardPack({_id: cardPackId, ...newCardPackData}, token);
+            await saveTokenInCookie.set('auth_token', createdCardPackData.token);
+        } else {
+            console.log('addUpdatePackThunk Error!');
+        }
+
         await dispatch(setPacksThunk(packsGetData));
     } catch (e) {
         console.log(e.response);

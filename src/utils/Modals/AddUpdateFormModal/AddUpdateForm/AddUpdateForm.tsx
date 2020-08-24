@@ -3,22 +3,29 @@ import {memo, useCallback} from 'react';
 import {useDispatch} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
-import {schemaAddNewCardPackForm} from "../../../../utils/validators/validators";
 import {Alert, Button, Checkbox, Input, Radio} from "antd";
-import s from './AddPackForm.module.scss'
-import {addCardPackType} from "../../../../utils/Types/PacksTypes/PacksTypes";
-import {addNewPackThunk} from "../../../../redux/packs-reducer";
+import s from './AddUpdateForm.module.scss'
+import {addUpdatePackThunk} from "../../../../redux/packs-reducer";
+import {schemaAddNewCardPackForm} from "../../../validators/validators";
+import {addCardPackType} from "../../../Types/PacksTypes/PacksTypes";
 
-export const AddPackForm = memo((props: any) => {
+export const AddUpdateForm = memo((props: any) => {
 
-    const page = props.pagination.current;
-    const pageCount = props.pagination.pageSize;
-    const sortPacks = props.sortPacks;
+    const {
+        sortPacks,
+        pagination: {current: page, pageSize: pageCount},
+        cardPackData,
+        actionName
+    } = props;
+
+    console.log()
 
     const dispatch = useDispatch();
 
     const addNewCardPackCallback = useCallback((newCardPackData) => {
-        dispatch(addNewPackThunk({page, pageCount, sortPacks}, newCardPackData));
+        const cardPackId = cardPackData ? cardPackData._id : null;
+
+        dispatch(addUpdatePackThunk({page, pageCount, sortPacks}, newCardPackData, cardPackId, actionName));
     }, [dispatch, page, pageCount, sortPacks]);
 
     const {handleSubmit, errors, control} = useForm<any>({
@@ -37,6 +44,7 @@ export const AddPackForm = memo((props: any) => {
                             name="name"
                             control={control}
                             placeholder="default = no Name"
+                            defaultValue={cardPackData && cardPackData.name}
                 />
                 {errors.name && <Alert type={"warning"}
                                        message={errors.name.message}
@@ -46,6 +54,7 @@ export const AddPackForm = memo((props: any) => {
                             name="path"
                             control={control}
                             placeholder="default = /def"
+                            defaultValue={cardPackData && cardPackData.path}
                 />
                 {errors.path && <Alert type={"warning"}
                                        message={errors.path.message}
@@ -53,12 +62,12 @@ export const AddPackForm = memo((props: any) => {
 
                 <Controller name="grade"
                             control={control}
-                            render={(props): any => {
+                            render={(props) => {
                                 return (
                                     <div className={`${s.gradeGroup} ${s.packParam}`}>
                                         <div>Grade:</div>
                                         <Radio.Group name="gradeGroup"
-                                                     defaultValue={0}
+                                                     defaultValue={cardPackData ? cardPackData.grade : 0}
                                                      onChange={e => props.onChange(e.target.value)}>
                                             <Radio value={0}>0</Radio>
                                             <Radio value={1}>1</Radio>
@@ -79,6 +88,7 @@ export const AddPackForm = memo((props: any) => {
                             name="shots"
                             control={control}
                             placeholder="default = 0"
+                            defaultValue={cardPackData && cardPackData.shots}
                 />
                 {errors.shots && <Alert type={"warning"}
                                         message={errors.shots.message}
@@ -95,9 +105,9 @@ export const AddPackForm = memo((props: any) => {
 
                 <Controller name="private"
                             control={control}
-                            render={(props): any => (
+                            render={(props) => (
                                 <Checkbox onChange={e => props.onChange(e.target.checked)}
-                                          checked={props.value}
+                                          checked={cardPackData && cardPackData.private || false}
                                           className={s.packParam}>Private</Checkbox>
                             )}
                 />
@@ -106,15 +116,14 @@ export const AddPackForm = memo((props: any) => {
                             name="type"
                             control={control}
                             placeholder="default = pack"
+                            defaultValue={cardPackData && cardPackData.type}
                 />
                 {errors.type && <Alert type={"warning"}
                                        message={errors.type.message}
                                        className={s.errAlert}/>}
 
-                <Button htmlType='submit' type="primary" className={s.Create}>Create</Button>
+                <Button htmlType='submit' type="primary" className={s.Create}>{actionName}</Button>
             </form>
         </div>
-    )
-        ;
-
+    );
 });

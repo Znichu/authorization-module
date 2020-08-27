@@ -8,7 +8,6 @@ const SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS';
 const IS_FETCHING = 'packsReducer/IS_FETCHING';
 const SET_CARD_PACKS_ERROR = 'packsReducer/SET_CARD_PACKS_ERROR';
 
-
 const initialState = {
     cardPacks: [] as (Array<cardPackType>),
     cardPacksTotalCount: null as (number | null),
@@ -20,11 +19,8 @@ const initialState = {
 };
 
 //Reducers
-
 export const packsReducer = (state: InitialStateType = initialState, action: ActionTypes) => {
-
     switch (action.type) {
-
         case SET_CARD_PACKS: {
             return {
                 ...state,
@@ -32,29 +28,24 @@ export const packsReducer = (state: InitialStateType = initialState, action: Act
                 cardPacks: [...action.payload.cardPacks]
             }
         }
-
         case SET_CARD_PACKS_ERROR: {
             return {
                 ...state,
                 errorMessage: action.errorMessage
             }
         }
-
         case IS_FETCHING: {
             return {
                 ...state,
                 isFetching: action.isFetching
             }
         }
-
         default:
             return state;
     }
 };
 
-
 //Actions
-
 const actions = {
     setCardPacksSuccess: (cardPacksData: cardPacksDataType) => ({
         type: SET_CARD_PACKS,
@@ -71,7 +62,6 @@ const actions = {
 }
 
 //Thunks
-
 export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => async (dispatch) => {
 
     const {
@@ -84,11 +74,9 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
         user_id = null
     } = packsGetData;
 
-
     const token = await saveTokenInCookie.get('auth_token');
 
     const packsQueryParamsArr = ['?'];
-
     packName && packsQueryParamsArr.push(`packName=${packName}`);
     min && packsQueryParamsArr.push(`min=${min}`);
     max && packsQueryParamsArr.push(`max=${max}`);
@@ -97,7 +85,6 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
     pageCount && packsQueryParamsArr.push(`pageCount=${pageCount}`);
     token && packsQueryParamsArr.push(`token=${token}`);
     user_id && packsQueryParamsArr.push(`user_id=${user_id}`);
-
     const resultPacksQueryParams = packsQueryParamsArr.join('&').replace(/\?&/, '?');
 
     await dispatch(actions.isFetchingSuccess(true));
@@ -112,7 +99,6 @@ export const setPacksThunk = (packsGetData: packsGetDataType): ThunkType => asyn
         await dispatch(actions.setCardPacksSuccessError(e.response.data.error));
     }
     await dispatch(actions.isFetchingSuccess(false));
-
 };
 
 export const addUpdatePackThunk = (packsGetData: packsGetDataType,
@@ -121,36 +107,30 @@ export const addUpdatePackThunk = (packsGetData: packsGetDataType,
                                    actionName: string): ThunkType => async (dispatch) => {
 
     const token = await saveTokenInCookie.get('auth_token');
-
     await dispatch(actions.isFetchingSuccess(true));
     try {
         if (actionName === 'Create') {
             const createdCardPackData = await packsAPI.addCardPack(newCardPackData, token);
             await saveTokenInCookie.set('auth_token', createdCardPackData.token);
-
         } else if (actionName === 'Update') {
             const createdCardPackData = await packsAPI.updateCardPack({_id: cardPackId, ...newCardPackData}, token);
             await saveTokenInCookie.set('auth_token', createdCardPackData.token);
         } else {
             console.log('addUpdatePackThunk Error!');
         }
-
         await dispatch(setPacksThunk(packsGetData));
     } catch (e) {
         console.log(e.response);
     }
     await dispatch(actions.isFetchingSuccess(false));
-
 }
 
 export const deleteCardPackThunk = (packsGetData: packsGetDataType, userId: string): ThunkType => async (dispatch) => {
 
     const token = await saveTokenInCookie.get('auth_token');
-
     await dispatch(actions.isFetchingSuccess(true));
     try {
         const deletedCardPackData = await packsAPI.deleteCardPack(userId, token);
-
         await saveTokenInCookie.set('auth_token', deletedCardPackData.token);
         await dispatch(setPacksThunk(packsGetData));
     } catch (e) {
@@ -158,7 +138,6 @@ export const deleteCardPackThunk = (packsGetData: packsGetDataType, userId: stri
     }
     await dispatch(actions.isFetchingSuccess(false));
 }
-
 
 //Types
 type InitialStateType = typeof initialState

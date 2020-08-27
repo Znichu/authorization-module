@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Button, Modal} from "antd";
-import {memo, useState} from "react";
+import {memo, ReactElement, useState} from "react";
 
-export const AddUpdateFormModal = memo((props: any) => {
+export const AddUpdateFormModal = memo((props: any): ReactElement => {
 
     const {modalTitle, button} = props;
 

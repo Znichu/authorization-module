@@ -2,16 +2,16 @@ import * as React from 'react';
 import {setPacksThunk, deleteCardPackThunk} from '../../redux/packs-reducer';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
-import {memo, useCallback, useEffect} from "react";
+import {memo, ReactElement, useCallback, useEffect} from "react";
 import {Button, Space, Table} from 'antd';
 import s from './Packs.module.scss'
-import {NavLink, Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {cardPackType, recordType} from "../../utils/Types/PacksTypes/PacksTypes";
-import {AddUpdateFormModal} from '../../utils/Modals/AddUpdateFormModal/AddUpdateFormModal';
-import {AddUpdateForm} from "../../utils/Modals/AddUpdateFormModal/AddUpdateForm/AddUpdateForm";
+import {AddUpdateFormModal} from "../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateFormModal";
+import {AddUpdateForm} from "../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateForm/AddUpdateForm";
 
 
-export const Packs: React.FC = memo((props) => {
+export const Packs: React.FC = memo((props): ReactElement => {
 
     const dispatch = useDispatch();
 
@@ -110,11 +110,10 @@ export const Packs: React.FC = memo((props) => {
                                        pagination={pagination}
                                        actionName='Update'
                                        cardPackData={
-                                           cardPacks.filter(cardPack => cardPack._id === record.cardPackId)[0]
-                                       }/>
+                                           cardPacks.filter(cardPack => cardPack._id === record.cardPackId)[0]}/>
                     </AddUpdateFormModal>
-                    <NavLink to={''}>Cards</NavLink>
-                    <NavLink to={''}>Learn</NavLink>
+                    <Link to={`/pack/${record.cardPackId}`}>Cards</Link>
+                    <Link to={`/pack/${record.cardPackId}`}>Learn</Link>
                 </Space>
             ),
         }

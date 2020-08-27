@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {memo, useCallback} from 'react';
+import {memo, ReactElement, useCallback} from 'react';
 import {useDispatch} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
@@ -9,22 +9,18 @@ import {addUpdatePackThunk} from "../../../../redux/packs-reducer";
 import {schemaAddNewCardPackForm} from "../../../validators/validators";
 import {addCardPackType} from "../../../Types/PacksTypes/PacksTypes";
 
-export const AddUpdateForm = memo((props: any) => {
+export const AddUpdateForm = memo((props: any): ReactElement => {
 
-    const {
+    let {
         sortPacks,
         pagination: {current: page, pageSize: pageCount},
         cardPackData,
         actionName
     } = props;
-
-    console.log()
-
     const dispatch = useDispatch();
 
     const addNewCardPackCallback = useCallback((newCardPackData) => {
         const cardPackId = cardPackData ? cardPackData._id : null;
-
         dispatch(addUpdatePackThunk({page, pageCount, sortPacks}, newCardPackData, cardPackId, actionName));
     }, [dispatch, page, pageCount, sortPacks]);
 
@@ -54,32 +50,28 @@ export const AddUpdateForm = memo((props: any) => {
                             name="path"
                             control={control}
                             placeholder="default = /def"
-                            defaultValue={cardPackData && cardPackData.path}
-                />
+                            defaultValue={cardPackData && cardPackData.path}/>
                 {errors.path && <Alert type={"warning"}
                                        message={errors.path.message}
                                        className={s.errAlert}/>}
 
                 <Controller name="grade"
                             control={control}
-                            render={(props) => {
-                                return (
-                                    <div className={`${s.gradeGroup} ${s.packParam}`}>
-                                        <div>Grade:</div>
-                                        <Radio.Group name="gradeGroup"
-                                                     defaultValue={cardPackData ? cardPackData.grade : 0}
-                                                     onChange={e => props.onChange(e.target.value)}>
-                                            <Radio value={0}>0</Radio>
-                                            <Radio value={1}>1</Radio>
-                                            <Radio value={2}>2</Radio>
-                                            <Radio value={3}>3</Radio>
-                                            <Radio value={4}>4</Radio>
-                                            <Radio value={5}>5</Radio>
-                                        </Radio.Group>
-                                    </div>
-                                );
-                            }}
-                />
+                            render={(props) => (
+                                <div className={`${s.gradeGroup} ${s.packParam}`}>
+                                    <div>Grade:</div>
+                                    <Radio.Group name="gradeGroup"
+                                                 defaultValue={cardPackData ? cardPackData.grade : 0}
+                                                 onChange={e => props.onChange(e.target.value)}>
+                                        <Radio value={0}>0</Radio>
+                                        <Radio value={1}>1</Radio>
+                                        <Radio value={2}>2</Radio>
+                                        <Radio value={3}>3</Radio>
+                                        <Radio value={4}>4</Radio>
+                                        <Radio value={5}>5</Radio>
+                                    </Radio.Group>
+                                </div>
+                            )}/>
                 {errors.grade && <Alert type={"warning"}
                                         message={errors.grade.message}
                                         className={s.errAlert}/>}
@@ -88,8 +80,7 @@ export const AddUpdateForm = memo((props: any) => {
                             name="shots"
                             control={control}
                             placeholder="default = 0"
-                            defaultValue={cardPackData && cardPackData.shots}
-                />
+                            defaultValue={cardPackData && cardPackData.shots}/>
                 {errors.shots && <Alert type={"warning"}
                                         message={errors.shots.message}
                                         className={s.errAlert}/>}
@@ -105,19 +96,15 @@ export const AddUpdateForm = memo((props: any) => {
 
                 <Controller name="private"
                             control={control}
-                            render={(props) => (
-                                <Checkbox onChange={e => props.onChange(e.target.checked)}
-                                          checked={cardPackData && cardPackData.private || false}
-                                          className={s.packParam}>Private</Checkbox>
-                            )}
-                />
+                            render={(props) => <Checkbox onChange={e => props.onChange(e.target.checked)}
+                                                         defaultChecked={cardPackData && cardPackData.private}
+                                                         className={s.packParam}>Private</Checkbox>}/>
 
                 <Controller as={<Input addonBefore="Type:" className={s.packParam}/>}
                             name="type"
                             control={control}
                             placeholder="default = pack"
-                            defaultValue={cardPackData && cardPackData.type}
-                />
+                            defaultValue={cardPackData && cardPackData.type}/>
                 {errors.type && <Alert type={"warning"}
                                        message={errors.type.message}
                                        className={s.errAlert}/>}

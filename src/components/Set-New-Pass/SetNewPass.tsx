@@ -19,7 +19,6 @@ export const SetNewPass = () => {
     });
     const onSubmit = (data: SetNewPassType) => {
         resetPassword(data.password);
-        console.log(data)
     };
 
     const dispatch = useDispatch();

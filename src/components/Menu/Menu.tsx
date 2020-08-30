@@ -22,14 +22,11 @@ export function HeaderMenu() {
             <Menu.Item key="packs">
                 <NavLink  to='/packs'>Packs</NavLink>
             </Menu.Item>
-            <Menu.Item key="cards">
+{/*            <Menu.Item key="cards">
                 <NavLink  to='/cards'>Cards</NavLink>
-            </Menu.Item>
+            </Menu.Item>*/}
             <Menu.Item key="editor">
                 <NavLink  to='/editor'>Editor</NavLink>
-            </Menu.Item>
-            <Menu.Item key="packs">
-                <NavLink to='/packs'>Packs</NavLink>
             </Menu.Item>
         </Menu>
     )

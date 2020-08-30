@@ -2,8 +2,8 @@ import axios from "axios";
 import { cardPackType } from "../utils/Types/PacksTypes/PacksTypes";
 
 const instance = axios.create({
-    baseURL: "http://localhost:7542/1.0/",
-    // baseURL: "https://cards-nya-back.herokuapp.com/1.0/"
+    /*baseURL: "http://localhost:7542/1.0/",*/
+    baseURL: "https://cards-nya-back.herokuapp.com/1.0/"
 });
 
 export const packsAPI = {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {setPacksThunk, deleteCardPackThunk, actions} from '../../redux/packs-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from '../../redux/store';
@@ -11,10 +11,15 @@ import {AddUpdateFormModal} from '../../utils/Modals/AddUpdateCardsPackFormModal
 import {AddUpdateForm} from '../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateForm/AddUpdateForm';
 import {SwitchTable} from './SwitchTable/SwitchTable';
 import {TablePaginationConfig, ColumnsType, SorterResult} from 'antd/lib/table/interface';
+import {action} from "../../redux/menu-reducer";
 
 export const Packs: React.FC = memo((): ReactElement => {
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(action.setSelectedKey('packs'));
+    }, [])
 
     const {
         packs: {
@@ -28,6 +33,7 @@ export const Packs: React.FC = memo((): ReactElement => {
         },
         singInReducer: {_id: authUserId}
     } = useSelector((state: AppStateType) => state);
+    const isAuth = useSelector((state: AppStateType) => state.profile.isAuth)
 
     const user_id = packsToggle && authUserId ? authUserId : '';
 
@@ -40,6 +46,7 @@ export const Packs: React.FC = memo((): ReactElement => {
 
     useEffect(() => {
         dispatch(setPacksThunk({}));
+
     }, []);
 
     const switchPacks = useCallback((user_id: string | null, packsToggle: boolean) => {
@@ -61,7 +68,7 @@ export const Packs: React.FC = memo((): ReactElement => {
         //We get object or array. We should found value of grade filter and return 0 or 1
         const sortPacksDefine = () => {
             if (extra.length >= 2) {
-                const gradeParam = extra.filter((sorterParam: {field: string} ) => sorterParam.field === 'grade');
+                const gradeParam = extra.filter((sorterParam: { field: string }) => sorterParam.field === 'grade');
                 return gradeParam[0].order = gradeParam;
             } else {
                 return extra.field === 'grade' ? extra.order : null;
@@ -146,19 +153,17 @@ export const Packs: React.FC = memo((): ReactElement => {
 
     return (
         <>
-            {authUserId ?
-                <div className=''>
-                    <SwitchTable packsToggle={packsToggle}
-                                 switchPacksHandler={() => switchPacksHandler()}
-                    />
-                    <Table dataSource={dataSource}
-                           columns={columns}
-                           pagination={pagination}
-                           loading={isFetching}
-                           onChange={onChangeTableParams}
-                    />
-                </div>
-                : <Redirect to={'/sign-in'}/>
+            <div className=''>
+                <SwitchTable packsToggle={packsToggle}
+                             switchPacksHandler={() => switchPacksHandler()}
+                />
+                <Table dataSource={dataSource}
+                       columns={columns}
+                       pagination={pagination}
+                       loading={isFetching}
+                       onChange={onChangeTableParams}
+                />
+            </div>
             }
         </>
     )
@@ -167,6 +172,8 @@ export const Packs: React.FC = memo((): ReactElement => {
 
 //Types
 type sorterType = Record<string, ReactText[] | null>;
-type columnsType = ColumnsType<{ key: string; name: string | null; grade: number | null; userId: string | null; cardPackId: string | null; }> | undefined
+type columnsType =
+    ColumnsType<{ key: string; name: string | null; grade: number | null; userId: string | null; cardPackId: string | null; }>
+    | undefined
 
 

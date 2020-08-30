@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css';
 import {HeaderMenu} from "./components/Menu/Menu";
-import {Route, Switch, Redirect} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {Profile} from "./components/Profile/Profile";
 import {SignIn} from "./components/Sign-In/SignIn";
 import {Register} from "./components/Register/Register";
@@ -12,6 +12,7 @@ import {getInitializeApp} from "./redux/app-reducer";
 import {AppStateType} from "./redux/store";
 import {Preloader} from "./components/Preloader/Preloader";
 import AuthenticationRoute from "./utils/AuthenticationRoute";
+
 
 
 function App () {

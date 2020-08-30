@@ -6,6 +6,7 @@ import signInReducer from "./sign-in-reducer";
 import {SetNewPassReducer} from "./set-new-pass-reducer";
 import {InitializeApp} from "./app-reducer";
 import {ProfileReducer} from "./profile-reducer";
+import {MenuReducer} from "./menu-reducer";
 
 const rootReducer = combineReducers({
     forgotPage: forgotReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     profile: ProfileReducer,
     initializeApp: InitializeApp,
     restPass: SetNewPassReducer,
-    singInReducer: signInReducer
+    singInReducer: signInReducer,
+    menu: MenuReducer
 });
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;

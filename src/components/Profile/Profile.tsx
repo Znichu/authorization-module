@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
 import {Avatar, Button} from "antd";
@@ -6,6 +6,7 @@ import {createFromIconfontCN} from '@ant-design/icons';
 import {UserOutlined} from '@ant-design/icons';
 import {actions} from "../../redux/profile-reducer";
 import saveTokenInCookie from "../../utils/CookieToken/SaveTokenCookie"
+import {action} from "../../redux/menu-reducer";
 
 export const Profile = () => {
 
@@ -24,6 +25,8 @@ export const Profile = () => {
         logoutProfile();
         saveTokenInCookie.remove('auth_token');
     }
+
+    useEffect(() => { dispatch(action.setSelectedKey('profile')) }, [dispatch])
 
     const {email, name, verified, publicCardPacksCount, avatar} = useSelector((state: AppStateType) => state.profile.profile);
 

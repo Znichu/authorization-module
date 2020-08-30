@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
 import {Alert, Button, Input} from "antd";
@@ -8,6 +8,7 @@ import {AppStateType} from "../../redux/store";
 import {Redirect, Link} from 'react-router-dom';
 import style from './SignIn.module.css'
 import {schemaSignInForm} from "../../utils/validators/validators";
+import {action} from "../../redux/menu-reducer";
 
 //react-hook-form
 type  LoginData = {
@@ -33,10 +34,13 @@ export const SignIn = () => {
     const isAuth = useSelector((state: AppStateType) => state.profile.isAuth);
     const {isFetching, errorMessage} = useSelector((state: AppStateType) => state.singInReducer);
 
+    useEffect(() => { dispatch(action.setSelectedKey('sign-in')) }, [dispatch])
+
 
     if (isAuth) {
         return <Redirect to={`/profile`}/>
     }
+
 
     return (
         <div className={style.signInPage}>

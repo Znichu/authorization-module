@@ -55,6 +55,7 @@ export const SignIn = () => {
                         name="email"
                         control={control}
                         placeholder="Email"
+                        defaultValue={'free12345678@samuraijs.com'}
                     />
                     {errors.email && <Alert message="Login is required" type="error" showIcon/>}
                 </div>
@@ -64,6 +65,7 @@ export const SignIn = () => {
                         name="password"
                         control={control}
                         placeholder="Password"
+                        defaultValue={'12345678'}
                     />
                     {errors.password && <Alert message="Password is required" type="error" showIcon/>}
                 </div>

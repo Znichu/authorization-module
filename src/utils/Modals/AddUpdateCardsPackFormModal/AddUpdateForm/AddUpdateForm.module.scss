@@ -1,0 +1,23 @@
+.AddPackForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 400px;
+
+  .packParam {
+    margin: 10px 0;
+  }
+
+  .errAlert {
+    margin-bottom: 15px;
+  }
+
+  .gradeGroup {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .Create {
+    margin-top: 30px;
+  }
+}

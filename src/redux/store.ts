@@ -7,6 +7,7 @@ import {SetNewPassReducer} from "./set-new-pass-reducer";
 import {InitializeApp} from "./app-reducer";
 import {ProfileReducer} from "./profile-reducer";
 import {MenuReducer} from "./menu-reducer";
+import {packsReducer} from "./packs-reducer";
 
 const rootReducer = combineReducers({
     forgotPage: forgotReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     initializeApp: InitializeApp,
     restPass: SetNewPassReducer,
     singInReducer: signInReducer,
-    menu: MenuReducer
+    menu: MenuReducer,
+    packs: packsReducer
 });
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
@@ -24,3 +26,4 @@ export let store = createStore(rootReducer, composeEnhancers(applyMiddleware(thu
 export type AppStateType = ReturnType<typeof rootReducer>
 
 export type InferActionTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U } ? U : never
+

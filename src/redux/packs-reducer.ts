@@ -6,15 +6,17 @@ import {cardPackType, cardPacksDataType, packsGetDataType, addCardPackType} from
 
 const SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS';
 const IS_FETCHING = 'packsReducer/IS_FETCHING';
+const PACKS_TOGGLE = 'packsReducer/PACKS_TOGGLE';
 const SET_CARD_PACKS_ERROR = 'packsReducer/SET_CARD_PACKS_ERROR';
 
 const initialState = {
     cardPacks: [] as (Array<cardPackType>),
-    cardPacksTotalCount: null as (number | null),
+    cardPacksTotalCount: 0,
     page: 1,
     pageCount: 10,
     sortPacks: 1,
     isFetching: false,
+    packsToggle: false,
     errorMessage: "",
 };
 
@@ -40,13 +42,19 @@ export const packsReducer = (state: InitialStateType = initialState, action: Act
                 isFetching: action.isFetching
             }
         }
+        case PACKS_TOGGLE: {
+            return {
+                ...state,
+                packsToggle: action.packsToggle
+            }
+        }
         default:
             return state;
     }
 };
 
 //Actions
-const actions = {
+export const actions = {
     setCardPacksSuccess: (cardPacksData: cardPacksDataType) => ({
         type: SET_CARD_PACKS,
         payload: {...cardPacksData}
@@ -54,6 +62,10 @@ const actions = {
     setCardPacksSuccessError: (errorMessage: string) => ({
         type: SET_CARD_PACKS_ERROR,
         errorMessage
+    } as const),
+    packsToggleSuccess: (packsToggle: boolean) => ({
+        type: PACKS_TOGGLE,
+        packsToggle
     } as const),
     isFetchingSuccess: (isFetching: boolean) => ({
         type: IS_FETCHING,
@@ -140,6 +152,6 @@ export const deleteCardPackThunk = (packsGetData: packsGetDataType, userId: stri
 }
 
 //Types
-type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState
 type ActionTypes = InferActionTypes<typeof actions>
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>

@@ -1,44 +1,67 @@
 import * as React from 'react';
-import {setPacksThunk, deleteCardPackThunk} from '../../redux/packs-reducer';
-import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../redux/store";
-import {memo, ReactElement, useCallback, useEffect} from "react";
+import {setPacksThunk, deleteCardPackThunk, actions} from '../../redux/packs-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppStateType} from '../../redux/store';
+import {memo, ReactElement, ReactText, useCallback, useEffect} from 'react';
 import {Button, Space, Table} from 'antd';
 import s from './Packs.module.scss'
-import {Link, Redirect} from "react-router-dom";
-import {cardPackType, recordType} from "../../utils/Types/PacksTypes/PacksTypes";
-import {AddUpdateFormModal} from "../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateFormModal";
-import {AddUpdateForm} from "../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateForm/AddUpdateForm";
+import {Link, Redirect} from 'react-router-dom';
+import {cardPackType, recordType} from '../../utils/Types/PacksTypes/PacksTypes';
+import {AddUpdateFormModal} from '../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateFormModal';
+import {AddUpdateForm} from '../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateForm/AddUpdateForm';
+import {SwitchTable} from './SwitchTable/SwitchTable';
+import {TablePaginationConfig, ColumnsType, SorterResult} from 'antd/lib/table/interface';
 
-
-export const Packs: React.FC = memo((props): ReactElement => {
+export const Packs: React.FC = memo((): ReactElement => {
 
     const dispatch = useDispatch();
 
     const {
-        packs: cardPacksData,
+        packs: {
+            cardPacks,
+            cardPacksTotalCount,
+            page,
+            pageCount,
+            sortPacks,
+            isFetching,
+            packsToggle
+        },
         singInReducer: {_id: authUserId}
     } = useSelector((state: AppStateType) => state);
 
+    const user_id = packsToggle && authUserId ? authUserId : '';
 
-    const {cardPacks, cardPacksTotalCount, page, pageCount, sortPacks, isFetching} = cardPacksData;
-
-    const pagination: any = {
+    const pagination: TablePaginationConfig = {
         current: page,
         pageSize: pageCount,
         total: cardPacksTotalCount,
-        position: ["bottomCenter"]
+        position: ['bottomCenter']
     };
 
     useEffect(() => {
         dispatch(setPacksThunk({}));
     }, []);
 
-    const onChangeTableParams = useCallback((pagination: any, sorter: any, extra: any) => {
+    const switchPacks = useCallback((user_id: string | null, packsToggle: boolean) => {
+        dispatch(setPacksThunk({page, pageCount, sortPacks, user_id}));
+        dispatch(actions.packsToggleSuccess(packsToggle));
+    }, [dispatch, packsToggle]);
+
+    const switchPacksHandler = useCallback(() => {
+        if (packsToggle) {
+            switchPacks('', false);
+        } else {
+            switchPacks(authUserId, true);
+        }
+    }, [packsToggle]);
+
+    const onChangeTableParams = useCallback((pagination: TablePaginationConfig,
+                                             sorter: sorterType,
+                                             extra: any) => {
         //We get object or array. We should found value of grade filter and return 0 or 1
         const sortPacksDefine = () => {
             if (extra.length >= 2) {
-                const gradeParam = extra.filter((sorterParam: any) => sorterParam.field === 'grade');
+                const gradeParam = extra.filter((sorterParam: {field: string} ) => sorterParam.field === 'grade');
                 return gradeParam[0].order = gradeParam;
             } else {
                 return extra.field === 'grade' ? extra.order : null;
@@ -46,14 +69,14 @@ export const Packs: React.FC = memo((props): ReactElement => {
         };
         const sortPacks = sortPacksDefine() ? (sortPacksDefine() === 'ascend' ? 1 : 0) : 1;
         const {current: page, pageSize: pageCount} = pagination;
-        dispatch(setPacksThunk({page, pageCount, sortPacks}));
-    }, [dispatch]);
+        dispatch(setPacksThunk({page, pageCount, sortPacks, user_id}));
+    }, [dispatch, packsToggle]);
 
 
     const deleteCardPack = useCallback((pagination, sortPacks, cardPackId) => {
         const {current: page, pageSize: pageCount} = pagination;
-        dispatch(deleteCardPackThunk({page, pageCount, sortPacks}, cardPackId));
-    }, [dispatch]);
+        dispatch(deleteCardPackThunk({page, pageCount, sortPacks, user_id}, cardPackId));
+    }, [dispatch, packsToggle]);
 
 
     const dataSource = cardPacks.map((cardPack: cardPackType, index: number) => ({
@@ -64,7 +87,7 @@ export const Packs: React.FC = memo((props): ReactElement => {
         cardPackId: cardPack._id
     }));
 
-    const columns: any = [
+    const columns: columnsType = [
         {
             key: 'name',
             title: 'Name',
@@ -89,10 +112,11 @@ export const Packs: React.FC = memo((props): ReactElement => {
                 <AddUpdateFormModal modalTitle='Create a new cards pack'
                                     button={{
                                         name: 'Add',
-                                        params: {type: "primary", ghost: true}
+                                        params: {type: 'primary', ghost: true}
                                     }}>
                     <AddUpdateForm sortPacks={sortPacks}
                                    pagination={pagination}
+                                   user_id={user_id}
                                    actionName='Create'/>
                 </AddUpdateFormModal>,
             render: (record: recordType) => (
@@ -104,16 +128,17 @@ export const Packs: React.FC = memo((props): ReactElement => {
                     <AddUpdateFormModal modalTitle='Update a cards pack'
                                         button={{
                                             name: 'update',
-                                            params: {type: "primary", disabled: authUserId !== record.userId}
+                                            params: {type: 'primary', disabled: authUserId !== record.userId}
                                         }}>
                         <AddUpdateForm sortPacks={sortPacks}
                                        pagination={pagination}
                                        actionName='Update'
+                                       user_id={user_id}
                                        cardPackData={
                                            cardPacks.filter(cardPack => cardPack._id === record.cardPackId)[0]}/>
                     </AddUpdateFormModal>
                     <Link to={`/pack/${record.cardPackId}`}>Cards</Link>
-                    <Link to={`/pack/${record.cardPackId}`}>Learn</Link>
+                    <Link to={`/pack`}>Learn</Link>
                 </Space>
             ),
         }
@@ -122,7 +147,10 @@ export const Packs: React.FC = memo((props): ReactElement => {
     return (
         <>
             {authUserId ?
-                <div className="">
+                <div className=''>
+                    <SwitchTable packsToggle={packsToggle}
+                                 switchPacksHandler={() => switchPacksHandler()}
+                    />
                     <Table dataSource={dataSource}
                            columns={columns}
                            pagination={pagination}
@@ -135,3 +163,10 @@ export const Packs: React.FC = memo((props): ReactElement => {
         </>
     )
 });
+
+
+//Types
+type sorterType = Record<string, ReactText[] | null>;
+type columnsType = ColumnsType<{ key: string; name: string | null; grade: number | null; userId: string | null; cardPackId: string | null; }> | undefined
+
+

@@ -7,29 +7,37 @@ import {Alert, Button, Checkbox, Input, Radio} from "antd";
 import s from './AddUpdateForm.module.scss'
 import {addUpdatePackThunk} from "../../../../redux/packs-reducer";
 import {schemaAddNewCardPackForm} from "../../../validators/validators";
-import {addCardPackType} from "../../../Types/PacksTypes/PacksTypes";
+import {addCardPackType, cardPackType} from "../../../Types/PacksTypes/PacksTypes";
+import {TablePaginationConfig} from "antd/lib/table/interface";
 
-export const AddUpdateForm = memo((props: any): ReactElement => {
+export const AddUpdateForm = memo((props: propsType): ReactElement => {
 
     let {
         sortPacks,
         pagination: {current: page, pageSize: pageCount},
         cardPackData,
-        actionName
+        actionName,
+        user_id
     } = props;
+
     const dispatch = useDispatch();
 
-    const addNewCardPackCallback = useCallback((newCardPackData) => {
+    const addUpdateCardsPackCallback = useCallback((newCardPackData) => {
         const cardPackId = cardPackData ? cardPackData._id : null;
-        dispatch(addUpdatePackThunk({page, pageCount, sortPacks}, newCardPackData, cardPackId, actionName));
-    }, [dispatch, page, pageCount, sortPacks]);
+        dispatch(addUpdatePackThunk({
+            page,
+            pageCount,
+            sortPacks,
+            user_id
+        }, newCardPackData, cardPackId, actionName));
+    }, [dispatch, page, pageCount, sortPacks, user_id]);
 
-    const {handleSubmit, errors, control} = useForm<any>({
+    const {handleSubmit, errors, control} = useForm({
         resolver: yupResolver(schemaAddNewCardPackForm)
     });
 
     const onSubmit = (data: addCardPackType) => {
-        addNewCardPackCallback(data);
+        addUpdateCardsPackCallback(data);
     };
 
     return (
@@ -57,7 +65,7 @@ export const AddUpdateForm = memo((props: any): ReactElement => {
 
                 <Controller name="grade"
                             control={control}
-                            render={(props) => (
+                            render={(props:gradeRenderType) => (
                                 <div className={`${s.gradeGroup} ${s.packParam}`}>
                                     <div>Grade:</div>
                                     <Radio.Group name="gradeGroup"
@@ -114,3 +122,14 @@ export const AddUpdateForm = memo((props: any): ReactElement => {
         </div>
     );
 });
+
+
+//Types
+type propsType = {
+    sortPacks: number,
+    pagination: TablePaginationConfig,
+    cardPackData?: cardPackType,
+    actionName: string,
+    user_id: string
+};
+type gradeRenderType = { onChange: (...event: any[]) => void; onBlur: () => void; value: any; };

@@ -42,7 +42,7 @@ export type packsGetDataType = {
     sortPacks?: number,
     page?: number,
     pageCount?: number,
-    user_id?: number
+    user_id?: string | null
 };
 
 

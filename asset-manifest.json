@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/authorization-module/static/css/main.77ae286d.chunk.css",
-    "main.js": "/authorization-module/static/js/main.7f65b165.chunk.js",
-    "main.js.map": "/authorization-module/static/js/main.7f65b165.chunk.js.map",
+    "main.css": "/authorization-module/static/css/main.11217a5e.chunk.css",
+    "main.js": "/authorization-module/static/js/main.41b54fbe.chunk.js",
+    "main.js.map": "/authorization-module/static/js/main.41b54fbe.chunk.js.map",
     "runtime-main.js": "/authorization-module/static/js/runtime-main.4849c254.js",
     "runtime-main.js.map": "/authorization-module/static/js/runtime-main.4849c254.js.map",
     "static/css/2.c8fdb744.chunk.css": "/authorization-module/static/css/2.c8fdb744.chunk.css",
-    "static/js/2.2001ae1b.chunk.js": "/authorization-module/static/js/2.2001ae1b.chunk.js",
-    "static/js/2.2001ae1b.chunk.js.map": "/authorization-module/static/js/2.2001ae1b.chunk.js.map",
+    "static/js/2.12a8ece4.chunk.js": "/authorization-module/static/js/2.12a8ece4.chunk.js",
+    "static/js/2.12a8ece4.chunk.js.map": "/authorization-module/static/js/2.12a8ece4.chunk.js.map",
     "index.html": "/authorization-module/index.html",
-    "precache-manifest.a97b6a0e0a3722cb56896f9a5f6b489d.js": "/authorization-module/precache-manifest.a97b6a0e0a3722cb56896f9a5f6b489d.js",
+    "precache-manifest.ab9edf0ed716833308d37850b8810c2c.js": "/authorization-module/precache-manifest.ab9edf0ed716833308d37850b8810c2c.js",
     "service-worker.js": "/authorization-module/service-worker.js",
     "static/css/2.c8fdb744.chunk.css.map": "/authorization-module/static/css/2.c8fdb744.chunk.css.map",
-    "static/css/main.77ae286d.chunk.css.map": "/authorization-module/static/css/main.77ae286d.chunk.css.map",
-    "static/js/2.2001ae1b.chunk.js.LICENSE.txt": "/authorization-module/static/js/2.2001ae1b.chunk.js.LICENSE.txt"
+    "static/css/main.11217a5e.chunk.css.map": "/authorization-module/static/css/main.11217a5e.chunk.css.map",
+    "static/js/2.12a8ece4.chunk.js.LICENSE.txt": "/authorization-module/static/js/2.12a8ece4.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4849c254.js",
     "static/css/2.c8fdb744.chunk.css",
-    "static/js/2.2001ae1b.chunk.js",
-    "static/css/main.77ae286d.chunk.css",
-    "static/js/main.7f65b165.chunk.js"
+    "static/js/2.12a8ece4.chunk.js",
+    "static/css/main.11217a5e.chunk.css",
+    "static/js/main.41b54fbe.chunk.js"
   ]
 }

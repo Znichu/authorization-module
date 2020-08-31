@@ -5,12 +5,12 @@ import {AppStateType} from '../../redux/store';
 import {memo, ReactElement, ReactText, useCallback, useEffect} from 'react';
 import {Button, Space, Table} from 'antd';
 import s from './Packs.module.scss'
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {cardPackType, recordType} from '../../utils/Types/PacksTypes/PacksTypes';
 import {AddUpdateFormModal} from '../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateFormModal';
 import {AddUpdateForm} from '../../utils/Modals/AddUpdateCardsPackFormModal/AddUpdateForm/AddUpdateForm';
 import {SwitchTable} from './SwitchTable/SwitchTable';
-import {TablePaginationConfig, ColumnsType, SorterResult} from 'antd/lib/table/interface';
+import {TablePaginationConfig, ColumnsType} from 'antd/lib/table/interface';
 import {action} from "../../redux/menu-reducer";
 
 export const Packs: React.FC = memo((): ReactElement => {
@@ -31,9 +31,8 @@ export const Packs: React.FC = memo((): ReactElement => {
             isFetching,
             packsToggle
         },
-        singInReducer: {_id: authUserId}
+        profile: {profile: {_id: authUserId}}
     } = useSelector((state: AppStateType) => state);
-    const isAuth = useSelector((state: AppStateType) => state.profile.isAuth)
 
     const user_id = packsToggle && authUserId ? authUserId : '';
 
@@ -46,7 +45,6 @@ export const Packs: React.FC = memo((): ReactElement => {
 
     useEffect(() => {
         dispatch(setPacksThunk({}));
-
     }, []);
 
     const switchPacks = useCallback((user_id: string | null, packsToggle: boolean) => {
@@ -55,11 +53,7 @@ export const Packs: React.FC = memo((): ReactElement => {
     }, [dispatch, packsToggle]);
 
     const switchPacksHandler = useCallback(() => {
-        if (packsToggle) {
-            switchPacks('', false);
-        } else {
-            switchPacks(authUserId, true);
-        }
+        packsToggle ? switchPacks('', false) : switchPacks(authUserId, true);
     }, [packsToggle]);
 
     const onChangeTableParams = useCallback((pagination: TablePaginationConfig,
